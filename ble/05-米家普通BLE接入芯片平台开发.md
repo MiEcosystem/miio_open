@@ -13,10 +13,10 @@
     - 调用认证库函数：`mible_server_miservice_init();`初始化用于米家认证Service和characteristic（Service UUID 0xFE95）。
     - 自行实现：`advertising_init();`初始化广播包。符合MiBeacon定义。详见[米家BLE MiBeacon协议](https://github.com/MiEcosystem/miio_open/blob/master/ble/02-%E7%B1%B3%E5%AE%B6BLE%20MiBeacon%E5%8D%8F%E8%AE%AE.md)。
     - 自行实现：`advertising_start();`开始广播。
-3. **芯片厂商**将适配好的API代码、示例工程以及相关硬件（开发板）发送到**小米**（tuchucheng@xiaomi.com），并告知详细的编译、烧写等操作方法。
+3. **芯片厂商**将适配好的API代码、示例工程以及相关硬件（开发板）发送到**小米**产品经理，并告知详细的编译、烧写等操作方法。
 4. **小米**完善示例工程，进行认证库的适配和测试，此过程中遇到问题可邮件沟通或现场联调。
 5. **小米**测试成功后将认证库发给**芯片厂商**进行自测试。测试方法如下：
-    - **芯片厂商**向**小米**（tuchucheng@xiaomi.com）申请小米蓝牙开发板白名单
+    - **芯片厂商**向**小米**产品经理申请小米蓝牙开发板白名单
     - 使用米家APP与开发板反复进行绑定、登陆等操作（可对开发板上/下电、杀死米家APP进程等）
     - 多种操作条件下都能够绑定、登陆成功，即为测试通过
 6. 双方测试无误后，**小米**将示例工程及适配的mijia_api上传GitHub，编写详细的使用说明文档，将认证库发到内部入库，供后续开发者申请和使用。

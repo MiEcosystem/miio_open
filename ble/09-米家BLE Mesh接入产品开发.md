@@ -125,7 +125,7 @@ Mesh Spec和MIoT Spec间映射关系如下：
 ### 开发之前
 
 - 与小米产品经理讨论确定产品的功能，能否适用于现在的小米BLE Mesh接入技术。
-- 联系小米（yangyufeng@xiaomi.com），申请Github mijia_ble_mesh私有工程的权限。
+- 联系小米产品经理，申请Github mijia_ble_mesh私有工程的权限。
 - 申请对应平台的模组。
 
 ### Realtek 模组开发指导
@@ -271,4 +271,3 @@ Tag字段主要包含以下内容：
 Signature = DSA(Hash(Firmware + Tag))
 
 设备收到OTA包后，首先提取开发者证书链，用预先存储的米家根证书验证证书链的合法性，之后基于证书链验证Firmware和Tag的合法性和完整性，验证通过后执行固件切换操作，否则忽略收到的OTA包。
-
