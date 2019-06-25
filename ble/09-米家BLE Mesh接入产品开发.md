@@ -254,20 +254,17 @@ Bluetooth Mesh Lighting Demonstration](https://www.silabs.com/documents/login/ap
 
 ### 更多
 
-目前只支持手机直连基于GATT做OTA，且固件必须经过验签。固件签名由米家服务器执行，开发者仅需将待升级固件（Firmware）及版本号上传至服务器，服务器自动在固件尾部添加Tag和签名信息，生成OTA包格式如下：
+目前只支持手机直连基于GATT做OTA，且固件必须经过验签。固件签名由米家服务器执行，开发者仅需将待升级固件（Firmware）及版本号上传至服务器，服务器自动在固件尾部添加Tag和签名信息，如下所示：
+
+![Model Development](./pics/auto-signature.png)
+
+生成OTA包格式如下：
 
 ![Model Development](./pics/OTA-format.png)
 
-Tag字段主要包含以下内容：
+通过点击“查看详情”可看到已签名固件的下载链接
 
-- 产品ID
-- Firmware、Tag及签名信息大小
-- 签名算法类型
-- 是否支持压缩或差分算法
-- CRC
+![Model Development](./pics/signature-url.png)
 
-签名信息字段包含开发者证书链及签名值，签名计算公式如下：
+APP下载已签名固件并发送至设备后，设备首先验证固件的合法性和完整性，验证通过后执行固件切换操作，否则忽略收到的OTA包。
 
-Signature = DSA(Hash(Firmware + Tag))
-
-设备收到OTA包后，首先提取开发者证书链，用预先存储的米家根证书验证证书链的合法性，之后基于证书链验证Firmware和Tag的合法性和完整性，验证通过后执行固件切换操作，否则忽略收到的OTA包。
