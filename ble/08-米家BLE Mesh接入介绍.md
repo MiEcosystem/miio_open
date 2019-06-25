@@ -12,6 +12,8 @@
 - BLE Mesh会使得所有的子设备组成一个网络，经过合理的布局和Mesh提供的转发功能，设备可以突破传统BLE接入距离的限制。
 - 支持低功耗。
 
+![Xiaomi Mesh Topology](./pics/mesh-topology.png)
+
 ### 小米BLE Mesh模组介绍
 
 - 默认支持Relay，Friend，Low Power功能，Proxy功能可选。

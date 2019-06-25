@@ -14,7 +14,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 可以简单理解为，MIoT Spec是小米定义并实现的设备描述规范，Mesh网关、米家APP 、小爱同学，AI大脑、米家服务器均采用这套规范对设备进行控制；Mesh Spec是SIG定义的BLE Mesh应用层规范，用于BLE Mesh设备之间进行相互通信。两种规范会在Mesh网关完成转换，如下图：
 
-![Xiaomi Mesh Topology](./pics/xiaomi-mesh-topology.png)
+![Xiaomi Mesh Profile](./pics/mesh-profile.png)
 
 ### 模组 + 固件SDK
 
@@ -28,7 +28,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 | :----------- | :------- | :--------------------------------------------------------- | :--------------------- |
 | Silicon Labs | BG13     | https://github.com/MiEcosystem/mijia_ble_mesh/tree/silabs  | Flash ~ 64K, RAM ~ 48K |
 | Realtek      | RTL8762C | https://github.com/MiEcosystem/mijia_ble_mesh/tree/realtek | Flash ~ 80K, RAM ~ 48K |
-| Telink       | TLSR8269 | https://github.com/MiEcosystem/mijia_ble_mesh/tree/telink  | Flash ~ 24K, RAM ~ 4K  |
+| Telink （开发中）| TLSR8269 | https://github.com/MiEcosystem/mijia_ble_mesh/tree/telink  | Flash ~ 24K, RAM ~ 4K  |
 
 
 ## 产品创建流程
