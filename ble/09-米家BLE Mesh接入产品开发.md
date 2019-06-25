@@ -59,10 +59,14 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 目前支持BLE Mesh模板名称及功能说明如下：后续会逐步增多更多的模板
 
-|   名称    |        |           说明           |
-| :-------: | :----: | :----------------------: |
-| Lightness | 亮度灯 |    支持开关、亮度调节    |
-| Lightctl  | 色温灯 | 支持开关、亮度、色温调节 |
+|           名称           |    模板中文描述    |
+| :----------------------: | :----------------: |
+|        lightness         |       亮度灯       |
+|         lightctl         |     亮度色温灯     |
+|      one-key-switch      |      单键开关      |
+|      two-key-switch      |      双键开关      |
+| power-consumption-outlet | 插座（带功耗参数） |
+
 
 强烈建议开发者直接使用模板，如果模板不能满足用户需求，用户在模板的基础上还可以添加自定义Service。当然用户也可以不选用模板，全部使用自定义Service。即使是用户自定义的Service，也建议用户选用MIoT Spec Service。因为小爱同学，AI大脑只能理解MIoT Spec的定义，这样定义后，功能可以被语音控制。
 
@@ -267,4 +271,3 @@ Bluetooth Mesh Lighting Demonstration](https://www.silabs.com/documents/login/ap
 ![Model Development](./pics/signature-url.png)
 
 APP下载已签名固件并发送至设备后，设备首先验证固件的合法性和完整性，验证通过后执行固件切换操作，否则忽略收到的OTA包。
-
