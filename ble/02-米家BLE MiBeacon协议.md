@@ -51,22 +51,21 @@ C.2 : 根据Capability字段确定是否包含
 |   0   | Reserved           | 保留     |
 |   1   | Reserved           | 保留     |
 |   2   | Reserved           | 保留     |
-|   3   | isEncrypted        | 1，该包已加密，0，该包未加密  |
-|   4   | MAC Include        | 1，包含固定的MAC地址，0，不包含MAC地址(包含MAC地址是为了是的iOS识别此设备并进行连接)      |
-|   5   | Capability Include | 1，包含Capability，0，不包含Capability。设备未绑定前，这一位强制为1    |
-|   6   | Object Include     | 1，包含Object，0，不包含Object   |
-|   7   | Mesh               | 1，包含Mesh，0，不包含Mesh。普通BLE接入产品和高安全级接入，此项强制为0。Mesh接入此项强制为1。Mesh接入更多信息请参考Mesh相关文档 |
-|   8   | Reserved           | 保留 |
-|   9   | bindingCfm         | 1，此时需要被绑定，0，不需要被绑定。当用户在开发者平台选择设备确认配对时才有效，否则置0  |
-|  10   | Secure Auth        | 1，设备支持安全芯片认证，0，不支持。普通BLE接入，此项强制为0。高安全级BLE接入和Mesh接入，此项强制为1   |
-|  11   | Secure Login       | 1，使用对称加密登陆，0，使用非对称加密登陆(目前只支持0)    |
+|   3   | isEncrypted        | 0：该包未加密；1：该包已加密  |
+|   4   | MAC Include        | 0：不包含MAC地址；1：包含固定的MAC地址 (包含MAC地址是为了是的iOS识别此设备并进行连接)      |
+|   5   | Capability Include | 0：不包含Capability；1：包含Capability。设备未绑定前，这一位强制为1    |
+|   6   | Object Include     | 0：不包含Object；1：包含Object   |
+|   7   | Mesh               | 0：不包含Mesh；1：包含Mesh。普通BLE接入产品和高安全级接入，此项强制为0。Mesh接入此项强制为1。Mesh接入更多信息请参考Mesh相关文档 |
+|   8   | registered         | 0：设备未绑定；1：设备已注册绑定。此项用于表示设备是否被重置  |
+|   9   | solicited          | 0：无操作；1：请求 App 进行注册绑定。当用户在开发者平台选择设备确认配对时才有效，否则置0。此项原名称为bindingCfm，重命名为solicited “主动请求，招揽” App进行注册绑定  |
+| 10~11 | Auth Mode          | 0：旧版本认证；1：安全认证；2：标准认证；3：保留 |
 | 12~15 | version            | 版本号(当前为v5)    |
 
 <注> Reserved位必须填0
 
 <注> 相应的Bit位与MiBeacon的实际数据必须对应，否则APP或网关认为是不符合规范的MiBeacon直接丢弃。
 
-<注> 当周边有多个相同设备时(如多个蓝牙温湿度传感器)，怎么指定哪个设备需要被绑定？开发者需要在开发者平台选择蓝牙配对方式，目前有三种配对方式：APP选择配对，RSSI符合配对，设备确认配对。当选择APP选择配对或RSSI符合配对时，bindingcfm置0。当选择设备确认配对时，正常广播的MiBeacon中bindingcfm位为0，当用户触发，如按键，MiBeacon中bindingcfm位变为1，持续2~3秒后恢复为0。此时手机可以发现bindingcfm为1的设备并连接开始认证流程。
+<注> 当周边有多个相同设备时(如多个蓝牙温湿度传感器)，怎么指定哪个设备需要被绑定？开发者需要在开发者平台选择蓝牙配对方式，目前有三种配对方式：APP选择配对，RSSI符合配对，设备确认配对。当选择APP选择配对或RSSI符合配对时，solicited置0。当选择设备确认配对时，正常广播的MiBeacon中solicited位为0，当用户触发，如按键，MiBeacon中solicited位变为1，持续2~3秒后恢复为0。此时手机可以发现solicited为1的设备并连接开始认证流程。
 
 ## Capability 字段定义
 
@@ -79,7 +78,7 @@ C.2 : 根据Capability字段确定是否包含
 |   5   | I/O         | 1，包含I/O Capability字段                  |
 |  6~7  | Reserved    | 保留                                      |
 
-<注> BondAbility字段表明当周边有多个相同设备时如何确定要绑定哪个设备。无绑定：APP选择配对，RSSI符合配对。前绑定：设备确认配对，即先扫描，设备发确认包后(bindingCfm in Frame Control)进行连接。后绑定：扫描后直接连接，设备通过震动等方式确认。Combo：针对Combo芯片。此绑定方式需要在小米IoT开发者平台选择，并且与此处保持一致。
+<注> BondAbility字段表明当周边有多个相同设备时如何确定要绑定哪个设备。无绑定：APP选择配对，RSSI符合配对。前绑定：设备确认配对，即先扫描，设备发确认包后(solicited in Frame Control)进行连接。后绑定：扫描后直接连接，设备通过震动等方式确认。Combo：针对Combo芯片。此绑定方式需要在小米IoT开发者平台选择，并且与此处保持一致。
 
 ## I/O Capability 定义
 
