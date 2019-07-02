@@ -91,3 +91,7 @@ A: 产品的pid是在[小米IoT开发者平台](https://iot.mi.com/)上注册产
 #### Q: 当周边有多个相同设备时(如多个蓝牙温湿度传感器)，怎么指定哪个设备需要被绑定？
 
 A: 开发者需要在开发者平台选择蓝牙配对方式，目前有三种配对方式：APP选择配对，RSSI符合配对，设备确认配对。当选择APP选择配对或RSSI符合配对时，solicited置0。当选择设备确认配对时，正常广播的MiBeacon中solicited位为0，当用户触发，如按键，MiBeacon中solicited位变为1，持续2~3秒后恢复为0。此时手机可以发现solicited为1的设备并连接开始认证流程。注意不要与`mible_server.h`文件中device_info结构体中的strict_bind_confirm混淆。solicited是为了确认周边相同设备时，绑定哪个设备，而strict_bind_confirm是为了在设备端上确认是否可以绑定这个设备。此位原名称位bindingcfm，重命名为solicited。
+
+#### Q: 能否在一条MiBeacon中包含多个Object？
+
+A: 目前大部分网关都不支持解析多个Object，因此不建议这样做。
