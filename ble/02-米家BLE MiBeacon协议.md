@@ -14,13 +14,12 @@ MiBeacon协议规定了基于蓝牙4.0及以上设备的广播格式。MiBeacon�
 
 无论是在advertising中，还是scan response中，均采用统一格式定义。
 
-注意事项
+### 注意事项
 
 - 所有数据均为**小端格式**。
 - v5版本的MiBeacon**禁止**在scan response中添加有效object数据。后续米家BLE网关只会开启passive scan，因此scan response不能被网关接收。
-- 通过MiBeacon发送给网关的事件或属性，如果要确保网关成功接收，同一事件或属性至少重复10次。如果MiBeacon中Frame Counter位相同，米家BLE网关会认为这是同一个事件或属性。如果要广播不同的事件和属性，Frame Counter位必须不同。
-- 两种发送MiBeacon的方式，短时间内多次重复发送(例如开门/关门事件, **要求间隔100ms重复10次或更多**)或较长时间间隔持续发送(例如温度数据，**要求间隔2s持续发送**)，按需选择。推荐事件选用第一种方式而属性选择第二种方式。事件或属性的定义参考[米家BLE Object协议](https://github.com/MiEcosystem/miio_open/blob/master/ble/03-%E7%B1%B3%E5%AE%B6BLE%20Object%E5%8D%8F%E8%AE%AE.md)。米家对于此项会验收。
-- 采用高安全级接入的设备，必须调用**米家提供的API**来发送MiBeacon事件或属性。米家对于此项会验收。
+- 通过MiBeacon发送给网关的事件或属性，为了确保网关成功接收，同一事件或属性至少重复10次。只建议用户发送真正有意义的数据来减小网关负担，网关会遵循object定义的规则向云端发送数据。如果MiBeacon中Frame Counter位相同，米家BLE网关会认为这是同一个事件或属性。如果要广播不同的事件和属性，**Frame Counter与Random Number合并成的Counter必须递增**，米家网关具有防重放能力。另外，**包含事件或属性的MiBeacon都需要加密**。
+- 不建议用户自信拼接MiBeacon并进行发送，请参考米家提供的Demo并调用米家提供的API。普通接入的Demo即将提供，高安全级Demo请参考[米家高安全级BLE接入产品开发](https://github.com/MiEcosystem/miio_open/blob/master/ble/06-%E7%B1%B3%E5%AE%B6%E9%AB%98%E5%AE%89%E5%85%A8%E7%BA%A7BLE%E6%8E%A5%E5%85%A5%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91.md)。
 
 ## Service Data 或 Manu Data 格式
 
@@ -33,7 +32,7 @@ MiBeacon协议规定了基于蓝牙4.0及以上设备的广播格式。MiBeacon�
 |   5   | Capability              | U8     | 1                 | C.1               | 设备能力，详见下表定义     |
 |   6   | I/O capability          | U8     | 2                 | C.2               | I/O能力，目前只有高安全级BLE接入才会用到此字段，只支持MiBeacon v5版本。只有在绑定之前使用；当绑定完成，上报事件时(例如开门、关门)，此字段也不再需要。详见下表定义 |
 |   7   | Object                  | U8     | n(根据实际需求)   | C.1               | 触发事件或广播属性，详见[米家BLE Object定义](https://github.com/MiEcosystem/miio_open/blob/master/ble/03-%E7%B1%B3%E5%AE%B6BLE%20Object%E5%8D%8F%E8%AE%AE.md) |
-|   8   | Random Number           | U8     | 3                 | C.1               | 如果加密则为必选字段，随机数3字节，用于加密报文  |
+|   8   | Random Number           | U8     | 3                 | C.1               | 如果加密则为必选字段，与Frame Counter合并成为4字节Counter，用于防重放  |
 |   9   | Message Integrity Check | U8     | 4                 | C.1               | 如果加密则为必选字段，MIC四字节   |
 
 C.1 : 根据Frame Control字段定义确定是否包含
