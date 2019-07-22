@@ -12,6 +12,8 @@
 | Object Data Len |   1   |  Data长度  |
 |   Object Data   |   N   |    数据    |
 
+- ***每一款设备（每一款pid）最多只能支持7种Object，每个Object的有效数据长度最大为10 bytes***。
+
 ## ID定义
 
 由米家定义，分配如下：
