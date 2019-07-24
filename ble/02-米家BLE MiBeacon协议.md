@@ -18,9 +18,21 @@ MiBeacon协议规定了基于蓝牙4.0及以上设备的广播格式。MiBeacon�
 
 - 所有数据均为**小端格式**。
 - v5版本的MiBeacon**禁止**在scan response中添加有效object数据。后续米家BLE网关只会开启passive scan，因此scan response不能被网关接收。
-- 通过MiBeacon发送给网关的事件或属性，为了确保网关成功接收，同一事件或属性至少重复10次。只建议用户发送真正有意义的数据来减小网关负担，网关会遵循object定义的规则向云端发送数据。如果MiBeacon中Frame Counter位相同，米家BLE网关会认为这是同一个事件或属性。如果要广播不同的事件和属性，**Frame Counter与Random Number合并成的Counter必须递增**，米家网关具有防重放能力。另外，**包含事件或属性的MiBeacon都需要加密**。
+- 通过MiBeacon发送给网关的事件或属性，为了确保网关成功接收，同一事件或属性至少重复10次。只建议用户发送真正有意义的数据来减小网关负担，网关会遵循object定义的规则向云端发送数据。如果MiBeacon中Frame Counter位相同，米家BLE网关会认为这是同一个事件或属性。如果要广播不同的事件和属性，**Frame Counter与Random Number合并成的Counter必须递增**，米家网关具有防重放能力。
+- v5版本**包含事件或属性的MiBeacon都需要加密**。
 - 不建议用户自信拼接MiBeacon并进行发送，请参考米家提供的Demo并调用米家提供的API。普通接入的Demo即将提供，高安全级Demo请参考[米家高安全级BLE接入产品开发](https://github.com/MiEcosystem/miio_open/blob/master/ble/06-%E7%B1%B3%E5%AE%B6%E9%AB%98%E5%AE%89%E5%85%A8%E7%BA%A7BLE%E6%8E%A5%E5%85%A5%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91.md)。
-- ***每一款设备（每一款pid）最多只能支持7种Object，每个Object的有效数据长度最大为10 bytes***。
+
+### 网关限制
+
+表示事件或属性的MiBeacon（包含Object的MiBeacon）都是通过网关上报给后台，因此网关对某些参数有限制。
+
+- 同一账号下只能支持50款子设备上报信息。
+- 当网关周边有多于200个能够广播的BLE设备时，网关的性能会收到影响。
+- 不支持大于31 Bytes长度的MiBeacon。
+- 每一款设备（每一款pid）最多只能支持7种Object。
+- 每个MiBeacon中只能包含一个Object。
+- 每个Object的有效数据长度最大为10 bytes。
+- 某些较老版本的网关（MTK7697 1.x）只能支持大约15种品类的子设备。
 
 ## Service Data 或 Manu Data 格式
 
@@ -42,7 +54,7 @@ C.2 : 根据Capability字段确定是否包含
 
 <注> 如果包含的数据过多，超出Beacon长度，建议分多个Beacon广播。例如第一包广播Object，第二包广播MAC。v5版本不允许使用Scan Response。
 
-<注> 如果有多个Object，建议分多个Beacon广播。
+<注> 如果有多个Object，需要分多个Beacon广播。
 
 ## Frame Control 字段定义
 

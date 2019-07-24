@@ -12,7 +12,17 @@
 | Object Data Len |   1   |  Data长度  |
 |   Object Data   |   N   |    数据    |
 
-- ***每一款设备（每一款pid）最多只能支持7种Object，每个Object的有效数据长度最大为10 bytes***。
+### 网关限制
+
+表示事件或属性的MiBeacon（包含Object的MiBeacon）都是通过网关上报给后台，因此网关对某些参数有限制。
+
+- 同一账号下只能支持50款子设备上报信息。
+- 当网关周边有多于200个能够广播的BLE设备时，网关的性能会收到影响。
+- 不支持大于31 Bytes长度的MiBeacon。
+- 每一款设备（每一款pid）最多只能支持7种Object。
+- 每个MiBeacon中只能包含一个Object。
+- 每个Object的有效数据长度最大为10 bytes。
+- 某些较老版本的网关（MTK7697 1.x）只能支持大约15种品类的子设备。
 
 ## ID定义
 
