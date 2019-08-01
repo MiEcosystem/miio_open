@@ -49,6 +49,10 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 ![Model Development](./pics/select-model.png)
 
+基础配置页面确认**安全级别为低**，其他配置如图所示。
+
+![Model Development](./pics/basic-config.png)
+
 在“功能定义”中选择设备类型所需的模版。
 
 ![Model Development](./pics/define-functions.png)
