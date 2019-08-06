@@ -262,16 +262,28 @@ Bluetooth Mesh Lighting Demonstration](https://www.silabs.com/documents/login/ap
 
 ### 更多
 
-目前只支持手机直连基于GATT做OTA，且固件必须经过验签。固件签名由米家服务器执行，开发者仅需将待升级固件（Firmware）及版本号上传至服务器，服务器自动在固件尾部添加Tag和签名信息，如下所示：
+目前只支持手机直连基于GATT做OTA，且固件必须经过验签，否则设备会忽略收到的OTA包。
 
-![Model Development](./pics/auto-signature.png)
+固件签名由米家服务器执行，开发者仅需将待升级固件（Firmware）及版本号上传至服务器，新版操作界面如下所示（要求必须使用新版界面操作）：
 
-生成OTA包格式如下：
+![Model Development](./pics/upload_firmware.png)
 
-![Model Development](./pics/OTA-format.png)
+上传完成后，默认固件未签名，需手动申请签名，操作如下：
 
-通过点击“查看详情”可看到已签名固件的下载链接
+![Model Development](./pics/add_signature.png)
 
-![Model Development](./pics/signature-url.png)
+签名状态转换成“已签名”后，即可点击“开启测试”，用于开发者和内测用户下载新固件，操作如下：
 
-APP下载已签名固件并发送至设备后，设备首先验证固件的合法性和完整性，验证通过后执行固件切换操作，否则忽略收到的OTA包。
+![Model Development](./pics/start_test.png)
+
+如果是首次上传固件，上传完成后则必须配置支持签名和HTTPS的最低版本，例如设置的最低版本为1.2.0_0002，那么设备上的当前版本和待升级的版本，均必须大于1.2.0_0002。
+
+最低版本设置目前仅支持在旧版界面上操作，如下所示：
+
+![Model Development](./pics/version_config.png)
+
+最低版本号仅能在已经上传的版本号列表中选择，如下所示：
+
+![Model Development](./pics/version_list.PNG)
+
+
