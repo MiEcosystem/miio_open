@@ -39,6 +39,8 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 如下图创建产品，创建后会生成Product ID（后文简称PID），PID需要写入到设备固件里面，因此需记录下来。**注意：联网方式一定要选择“BLE-Mesh”**，其他选项按照图片选择。模组型号根据使用情况而定，若无合适选项则选择“其它”并手动填写相应模组型号。
 
+**Mesh模组第一次绑定后，模组中存储的证书链、Product ID和MAC会绑定在一起，即该模组的Product ID和MAC从此不可被更改。**
+
 ![Model Development](./pics/create-mesh-product.png)
 
 创建好产品后，从“数据中心”->“BI看板”选择对应的公司，点击进入产品管理界面。
@@ -49,7 +51,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 ![Model Development](./pics/select-model.png)
 
-基础配置页面确认**安全级别为低**，其他配置如图所示。
+基础配置页面确认**安全级别为低**，用户可以修改产品名称和产品图片，其他配置如图所示。
 
 ![Model Development](./pics/basic-config.png)
 
@@ -69,10 +71,15 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 |         lightctl         |     亮度色温灯     |
 |      one-key-switch      |      单键开关      |
 |      two-key-switch      |      双键开关      |
+|      three-key-switch    |      三键开关      |
 | power-consumption-outlet | 插座（带功耗参数） |
 
 
 强烈建议开发者直接使用模板，如果模板不能满足用户需求，用户在模板的基础上还可以添加自定义Service。当然用户也可以不选用模板，全部使用自定义Service。即使是用户自定义的Service，也建议用户选用MIoT Spec Service。因为小爱同学，AI大脑只能理解MIoT Spec的定义，这样定义后，功能可以被语音控制。
+
+![Model Development](./pics/add-more-service.png)
+
+**注意：目前对于自定义的Service，在网关端没有定义消息上报过滤规则，因此产品必须保证只上报有意义的数据，保证上报的时间间隔。此部分先联系产品经理。**
 
 消息上行时，Mesh网关会将Mesh Spec消息翻译成MIoT Spec消息，消息下行时，Mesh网关会将MIoT Spec消息翻译成Mesh Spec消息。如果用户自定义了Service，网关不会翻译，会通过Vendor Model透传此Service的Service ID、Property ID、Value（MIoT Spec定义），设备固件在Vendor Model里面解析、处理。
 
@@ -83,6 +90,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 ![Model Development](./pics/instance-siid.png)
 
 ![Model Development](./pics/instance-piid.png)
+
 
 ### 小米BLE Mesh模版
 
@@ -135,6 +143,8 @@ Mesh Spec和MIoT Spec间映射关系如下：
 - 与小米产品经理讨论确定产品的功能，能否适用于现在的小米BLE Mesh接入技术。
 - 联系小米产品经理，申请Github mijia_ble_mesh私有工程的权限。
 - 申请对应平台的模组。
+- 准备网关。由于Mesh网关仍在不断的迭代更新，已上市的网关并不一定包含最新的功能。**推荐使用**yeelight语音助手，绑定到个人名下后联系小米开发人员，**升级到最新测试版本**（包含多项正在开发的最新功能）。
+- 不论采用何种模组，demo工程中都默认指定了pid。此pid可以配合语音及App上的插件演示大部分功能。之后都需要**修改成厂商自己申请的pid**。并要了解，对于某个模组，第一次绑定之后，**pid和mac地址均不能改变**。
 
 ### Realtek 模组开发指导
 
@@ -260,7 +270,7 @@ Demonstration](https://www.silabs.com/documents/login/quick-start-guides/qsg148-
 * [AN1098: Understanding the Silicon Labs
 Bluetooth Mesh Lighting Demonstration](https://www.silabs.com/documents/login/application-notes/an1098-understanding-bluetooth-mesh-lighting-demo.pdf)
 
-### 更多
+### OTA
 
 目前只支持手机直连基于GATT做OTA，且固件必须经过验签，否则设备会忽略收到的OTA包。
 
@@ -285,5 +295,3 @@ Bluetooth Mesh Lighting Demonstration](https://www.silabs.com/documents/login/ap
 最低版本号仅能在已经上传的版本号列表中选择，如下所示：
 
 ![Model Development](./pics/version_list.PNG)
-
-
