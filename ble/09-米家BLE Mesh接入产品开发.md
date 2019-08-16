@@ -75,7 +75,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 | power-consumption-outlet | 插座（带功耗参数） |
 
 
-强烈建议开发者直接使用模板，如果模板不能满足用户需求，用户在模板的基础上还可以添加自定义Service。当然用户也可以不选用模板，全部使用自定义Service。即使是用户自定义的Service，也建议用户选用MIoT Spec Service。因为小爱同学，AI大脑只能理解MIoT Spec的定义，这样定义后，功能可以被语音控制。
+**用户一定要选择一个模板**，如果现有模板不能满足用户需求，可向产品经理提需求增加模板。用户在模板的基础上还可以添加标准Service和自定义Service。建议用户选用标准Service。因为小爱同学，AI大脑只能理解MIoT Spec的定义，这样定义后，功能可以被语音控制。
 
 ![Model Development](./pics/add-more-service.png)
 
