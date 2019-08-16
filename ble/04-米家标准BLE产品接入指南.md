@@ -64,7 +64,6 @@ $ git commit -am "add submodules mijia ble api & libs"
 ```
 mijia_ble_libs
 ├── common
-│   ├── crc32.c
 │   ├── mible_beacon.c
 │   ├── mible_crypto.c
 │   ├── mible_rxfer.c
@@ -90,7 +89,7 @@ mijia_ble_libs
     ├── micro-ecc
     │   ├── micro_ecc_?.a
     │   ├── micro_ecc_?.lib
-    │   └── uECC.c（如果缺少对应库文件，可使用此文件代替）
+    │   └── uECC.c（如果缺少对应平台库文件，可使用源码代替）
     └── pt
         └── pt_misc.c
 ```
@@ -182,7 +181,7 @@ mijia_ble_libs
 ### 广播方式
 BLE 是一种近场通信方式，如果要实现消息的远程上报，则需要搭配一个能够连接互联网的桥接设备，这个设备称为蓝牙网关。
 
-米家定义了两类广播消息 [object](https://github.com/MiEcosystem/miio_open/blob/master/ble/03-米家BLE%20Object协议.md)：事件和状态。**事件**上报不存在频率限制，具有高实时性，可以用来触发自动化场景，比如开门事件触发开灯；**状态**上报存在频率限制，具有高延迟，适用于周期或缓慢变化的数据，比如环境温度。使用 mibeacon_obj_enque() 将待发送消息放入发送队列，设备将按照设置的间隔进行多次广播。每条消息的发送间隔和总时长可以通过宏定义修改，具体参数参考 之前章节1.6 。
+米家定义了两类广播消息 [object](https://github.com/MiEcosystem/miio_open/blob/master/ble/03-米家BLE%20Object协议.md)：事件和状态。**事件**上报不存在频率限制，具有高实时性，可以用来触发自动化场景，比如开门事件触发开灯；**状态**上报存在频率限制，具有高延迟，适用于周期或缓慢变化的数据，比如环境温度。使用 `mibeacon_obj_enque()` 将待发送消息放入发送队列，设备将按照设置的间隔进行多次广播。每条消息的发送间隔和总时长可以通过宏定义修改，具体参数参考 之前章节1.6 。
 [示例代码](https://github.com/MiEcosystem/mijia_ble_standard/blob/65f0093ebaa19a58a0e43f108be321f675a8ce99/main.c#L478-L484)
 
 ### 连接方式
@@ -191,7 +190,7 @@ BLE 是一种近场通信方式，如果要实现消息的远程上报，则需�
 1.参考 `stdio_service_init()` 创建数据传输示例服务，注册回调函数，以接收 App 数据。(示例服务创建时使用了 mijia ble api, 开发者可直接使用原厂 SDK API)
 [示例代码](https://github.com/MiEcosystem/mijia_ble_libs/blob/3b733870ca186662761f153f850537bae022fb5d/mijia_profiles/stdio_service_server.c#L168-L234)
 
-2.发送数据前，先使用 `mi_session_encrypt()` 加密数据，再发送。参考 `stdio_tx()` 实现；
+2.建立连接并完成米家登陆后，双方会生成会话密钥。在发送数据前，先使用 `mi_session_encrypt()` 加密数据，再发送。参考 `stdio_tx()` 实现；
 [示例代码](https://github.com/MiEcosystem/mijia_ble_libs/blob/3b733870ca186662761f153f850537bae022fb5d/mijia_profiles/stdio_service_server.c#L237-L261)
 
 3.接收加密数据后，调用 `get_mi_authorization()` 判断设备当前登录状态，若已登录使用 `mi_session_decrypt()` 解密数据，再上报应用层处理。参考 stdio 服务 `on_write_permit()` 实现：
@@ -215,3 +214,16 @@ $ telnet localhost 2000
  
 App端：
 - android ：安装 [debug 版本 APK](https://github.com/MiEcosystem/NewXmPluginSDK/blob/master/%E7%B1%B3%E5%AE%B6%E8%B0%83%E8%AF%95APK%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80.md)，然后查找文件管理 -> 手机 -> Android -> data -> com.xiaomi.smarthome -> files -> log -> miio-bluetooth log
+
+#### Q: 产品的pid如何获取？
+
+A: 产品的pid是在[小米IoT开发者平台](https://iot.mi.com/)上注册产品时生成的，在demo中pid = 156，是一个弱绑定的蓝牙开发板产品，用于测试。 还有一个强绑定的蓝牙开发板产品pid = 930，此两个产品类型仅用于开发者做初期测试。在真正的产品开发中，开发者应需要pid及强弱绑定关系，与在[小米IoT开发者平台](https://iot.mi.com/)上注册产品时的信息保持一致。强弱绑定的具体定义，可参考小米IoT开发者平台。
+
+#### Q: 同时发现多个同类产品时(如多个蓝牙温湿度传感器)，用户如何确定绑定哪个产品？
+
+A: 开发者需要在开发者平台选择蓝牙配对方式，目前支持三种配对选择方式：
+* 通过 RSSI 判断：发现多个同类产品时，选择信号最强的产品进行绑定。
+* 设备选择即配对：产品需具有按键。当用户按下按键后，产品发送带有 solicited bit 广播包，米家 App 收到该广播包后会进行绑定。
+* App 选择即配对：产品需具有字符显示能力，能够显示 MAC 地址最后 2 字节。用户在米家 App 内选择相同 MAC 的产品进行绑定。
+
+
