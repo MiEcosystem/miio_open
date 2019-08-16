@@ -28,7 +28,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 | :----------- | :------- | :--------------------------------------------------------- | :--------------------- |
 | Silicon Labs | BG13     | https://github.com/MiEcosystem/mijia_ble_mesh/tree/silabs  | Flash ~ 64K, RAM ~ 48K |
 | Realtek      | RTL8762C | https://github.com/MiEcosystem/mijia_ble_mesh/tree/realtek | Flash ~ 80K, RAM ~ 48K |
-| Telink （开发中）| TLSR8253 | https://github.com/MiEcosystem/mijia_ble_mesh/tree/telink  | Flash ~ 24K, RAM ~ 20K  |
+| Telink （开发中）| TLSR825x | https://github.com/MiEcosystem/mijia_ble_mesh/tree/telink  | Flash ~ 24K, RAM ~ 20K  |
 
 
 ## 产品创建流程

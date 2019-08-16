@@ -34,7 +34,7 @@
 
 ## 米家高安全级认证库介绍
 
-开发者首先需要了解[米家普通BLE接入产品开发](https://github.com/MiEcosystem/miio_open/blob/master/ble/04-%E7%B1%B3%E5%AE%B6%E6%99%AE%E9%80%9ABLE%E6%8E%A5%E5%85%A5%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91.md)流程。
+开发者首先需要了解[米家标准BLE接入产品开发](https://github.com/MiEcosystem/miio_open/blob/master/ble/04-%E7%B1%B3%E5%AE%B6%E6%A0%87%E5%87%86BLE%E6%8E%A5%E5%85%A5%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91.md)流程。
 
 #### 产品开发过程中需了解的宏定义
 
@@ -111,8 +111,8 @@ const iic_config_t iic_config = {
 | 典型秘钥协商用时（ms）   | 41         | 130        |
 | 工作温度范围（℃）      | -40 ~ +85  | -40 ~ +105 |
 | ESD                   | 8KV（HBM） | 5KV（HBM） |
-|       包装             |  卷带包装  |    卷带包装   |
-|     安全认证          | 国内EAL4+      | 国际CC EAL5+    |
+| 包装                  |  卷带包装  |    卷带包装   |
+| 安全认证              | 国内EAL4+      | 国际CC EAL5+    |
 
 两颗芯片pin-to-pin，主要应用区别是温度范围和认证不同。出国内市场产品建议量产使用MJA1-HCIW，海外市场建议使用MJA1-SXIW。请根据产品定义与销售区域选择合适产品。
 

@@ -1,7 +1,9 @@
-# 米家标准 BLE 产品接入指南
-<!> 本文用于指导 **固件开发者** 实现标准 BLE 产品接入
+# 米家标准BLE接入产品开发
+
+*本文用于指导产品开发者实现标准BLE产品接入*
 
 ## 0.准备工作
+
 ### 软件环境：
 * IDE/toolchains (根据芯片 SDK 要求进行安装，如遇问题可咨询芯片原厂 FAE)
 * [JLink](https://www.segger.com/downloads/jlink/)
@@ -11,11 +13,12 @@
 硬件平台可以选用芯片原厂的开发板，或使用在研产品 PCBA。推荐使用原厂开发板环境进行功能验证。完成功能验证后再移植到在研产品 PCBA。米家提供基于开发板实现的标准接入 Demo Project。<br>
 Demo Project GitHub 地址如下：（请按照各分支下 README ，完成工程导入）
 
-| 芯片厂商      | 芯片平台         | Demo Project                                                       |
+| 芯片厂商      | 芯片平台       | Demo Project                                                       |
 | :----------- | :-------       | :----------------------------------------------------------------- |
-| Nordic       | 51 Series      | https://github.com/MiEcosystem/mijia_ble_standard/tree/nordic_legacy      |
+| Nordic       | 51 Series      | https://github.com/MiEcosystem/mijia_ble_standard/tree/nordic_legacy|
 | Nordic       | 52 Series      | https://github.com/MiEcosystem/mijia_ble_standard/tree/nordic      |
 | Silicon Labs | BG13           | https://github.com/MiEcosystem/mijia_ble_standard/tree/silabs      |
+| Telink       | TLSR8253       | https://github.com/MiEcosystem/mijia_ble_standard/tree/telink      |
 
 
 ## 1.代码集成
@@ -211,7 +214,7 @@ $ JLinkExe -device <your_soc_platform> -if swd -speed 1000 -RTTTelnetPort 2000 -
 $ telnet localhost 2000
 ```
 - windows 平台：打开 Segger JLink RTT Viewer，选择对应芯片型号。连接成功可直接查看log。
- 
+
 App端：
 - android ：安装 [debug 版本 APK](https://github.com/MiEcosystem/NewXmPluginSDK/blob/master/%E7%B1%B3%E5%AE%B6%E8%B0%83%E8%AF%95APK%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80.md)，然后查找文件管理 -> 手机 -> Android -> data -> com.xiaomi.smarthome -> files -> log -> miio-bluetooth log
 
@@ -226,4 +229,6 @@ A: 开发者需要在开发者平台选择蓝牙配对方式，目前支持三�
 * 设备选择即配对：产品需具有按键。当用户按下按键后，产品发送带有 solicited bit 广播包，米家 App 收到该广播包后会进行绑定。
 * App 选择即配对：产品需具有字符显示能力，能够显示 MAC 地址最后 2 字节。用户在米家 App 内选择相同 MAC 的产品进行绑定。
 
+#### Q: 产品如何OTA？
 
+A: 目前没有统一的米家OTA机制，请联系芯片厂商。

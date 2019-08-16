@@ -20,14 +20,14 @@ MiBeacon协议规定了基于蓝牙4.0及以上设备的广播格式。MiBeacon�
 - v5版本的MiBeacon**禁止**在scan response中添加有效object数据。后续米家BLE网关只会开启passive scan，因此scan response不能被网关接收。
 - 通过MiBeacon发送给网关的事件或属性，为了确保网关成功接收，同一事件或属性至少重复10次。只建议用户发送真正有意义的数据来减小网关负担，网关会遵循object定义的规则向云端发送数据。如果MiBeacon中Frame Counter位相同，米家BLE网关会认为这是同一个事件或属性。如果要广播不同的事件和属性，**Frame Counter与Random Number合并成的Counter必须递增**，米家网关具有防重放能力。
 - v5版本**包含事件或属性的MiBeacon都需要加密**。
-- 不建议用户自行拼接MiBeacon并进行发送，请参考米家提供的Demo并调用米家提供的API。普通接入的Demo即将提供，高安全级Demo请参考[米家高安全级BLE接入产品开发](https://github.com/MiEcosystem/miio_open/blob/master/ble/06-%E7%B1%B3%E5%AE%B6%E9%AB%98%E5%AE%89%E5%85%A8%E7%BA%A7BLE%E6%8E%A5%E5%85%A5%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91.md)。
+- 不建议用户自行拼接MiBeacon并进行发送，请参考米家提供的Demo并调用米家提供的API。标准接入的Demo请参考[mijia_ble_standard](https://github.com/MiEcosystem/mijia_ble_standard)，高安全级Demo请参考[mijia_ble_secure](https://github.com/MiEcosystem/mijia_ble_secure)。
 
 ### 网关限制
 
 表示事件或属性的MiBeacon（包含Object的MiBeacon）都是通过网关上报给后台，因此网关对某些参数有限制。
 
 - 同一账号下只能支持50款子设备上报信息。
-- 当网关周边有多于200个能够广播的BLE设备时，网关的性能会收到影响。
+- 当网关周边有多于200个能够广播的BLE设备时，网关的性能会受到影响。
 - 不支持大于31 Bytes长度的MiBeacon。
 - 每一款设备（每一款pid）最多只能支持7种Object。
 - 每个MiBeacon中只能包含一个Object。
@@ -67,7 +67,7 @@ C.2 : 根据Capability字段确定是否包含
 |   4   | MAC Include        | 0：不包含MAC地址；1：包含固定的MAC地址 (包含MAC地址是为了是的iOS识别此设备并进行连接)      |
 |   5   | Capability Include | 0：不包含Capability；1：包含Capability。设备未绑定前，这一位强制为1    |
 |   6   | Object Include     | 0：不包含Object；1：包含Object   |
-|   7   | Mesh               | 0：不包含Mesh；1：包含Mesh。普通BLE接入产品和高安全级接入，此项强制为0。Mesh接入此项强制为1。Mesh接入更多信息请参考Mesh相关文档 |
+|   7   | Mesh               | 0：不包含Mesh；1：包含Mesh。标准BLE接入产品和高安全级接入，此项强制为0。Mesh接入此项强制为1。Mesh接入更多信息请参考Mesh相关文档 |
 |   8   | registered         | 0：设备未绑定；1：设备已注册绑定。此项用于表示设备是否被重置  |
 |   9   | solicited          | 0：无操作；1：请求 App 进行注册绑定。当用户在开发者平台选择设备确认配对时才有效，否则置0。此项原名称为bindingCfm，重命名为solicited “主动请求，招揽” App进行注册绑定  |
 | 10~11 | Auth Mode          | 0：旧版本认证；1：安全认证；2：标准认证；3：保留 |
