@@ -294,4 +294,4 @@ Bluetooth Mesh Lighting Demonstration](https://www.silabs.com/documents/login/ap
 
 最低版本号仅能在已经上传的版本号列表中选择，如下所示：
 
-![Model Development](./pics/version_list.PNG)
+![Model Development](./pics/version_list.png)
