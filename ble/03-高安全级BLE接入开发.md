@@ -1,8 +1,6 @@
-# 米家高安全级BLE接入产品开发
+# 高安全级BLE接入开发
 
-*本文用于指导产品厂商利用已经支持米家高安全级BLE接入的芯片开发产品*
-
-<br/>
+*本文用于指导产品开发者实现高安全级BLE产品接入*
 
 ## 接入米家
 
@@ -34,7 +32,7 @@
 
 ## 米家高安全级认证库介绍
 
-开发者首先需要了解[米家标准BLE接入产品开发](https://github.com/MiEcosystem/miio_open/blob/master/ble/04-%E7%B1%B3%E5%AE%B6%E6%A0%87%E5%87%86BLE%E6%8E%A5%E5%85%A5%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91.md)流程。
+开发者首先需要了解[标准BLE接入开发](https://github.com/MiEcosystem/miio_open/blob/master/ble/02-%E6%A0%87%E5%87%86BLE%E6%8E%A5%E5%85%A5%E5%BC%80%E5%8F%91.md)流程。
 
 #### 产品开发过程中需了解的宏定义
 
@@ -130,7 +128,7 @@ const iic_config_t iic_config = {
 
 硬件平台可以选用芯片原厂的开发板，或使用在研产品开发板。推荐使用原厂开发板环境进行功能验证。完成功能验证后再移植到在研产品开发板。[已支持的芯片平台](#已支持芯片平台列表)
 
-### 认证库架构
+### 代码集成
 
 *如果开发者在 Demo Project 基础上进行开发，可以跳过本节 1~5 步*
 
@@ -144,8 +142,6 @@ Demo Project 代码结构：
 - [mijia ble libs](https://github.com/MiEcosystem/mijia_ble_libs.git)
 
 其中，SoC SDK & 协议栈 由芯片原厂提供，米家会持续更新已验证的 SDK 版本；mijia ble api & libs 由米家提供，以源码形式托管在 GitHub 上。推荐开发者通过 **git submodule** 方式将米家代码集成到自己仓库中。以便后续通过 submodule update 方式升级 api & libs。mijia ble api 为开源仓库，无需申请权限即可访问。mijia ble libs 为私有仓库，需申请访问权限。
-
-### 认证库集成
 
 *以 Nordic 为例*
 
@@ -181,12 +177,12 @@ mijia_ble_libs
 
 1. 创建一个配置文件，在文件中添加宏定义，然后将 `CUSTOMIZED_MI_CONFIG_FILE=<your_config.h>` 添加到工程 `Preprocesser symbols`中，或者直接将以下宏定义添加到工程的 `Preprocesser symbols` 配置中。[所需配置的宏定义](#产品开发过程中需了解的宏定义)
 
-### 主程序集成
+### 米家认证
 
 进行以下步骤前请**先阅读** mijia ble libs [**使用手册**](https://github.com/MiEcosystem/mijia_ble_libs/blob/master/readme.md)。
 
 1. 芯片运行环境初始化（包括但不限于芯片电源，时钟，GPIO，TIMER，IIC，BLE stack）。
-2. 使用 `mibeacon_data_set()` 生成 [**mibeacon**](https://github.com/MiEcosystem/miio_open/blob/master/ble/02-米家BLE%20MiBeacon协议.md) 广播数据，并开始广播。
+2. 使用 `mibeacon_data_set()` 生成MiBeacon广播数据，并开始广播。
 [示例代码](https://github.com/MiEcosystem/mijia_ble_secure/blob/c8fdaf4daedc412c7af1fdfa39fbd59e9874d27e/main.c#L521-L561)
 3. 实现 C 标准库 `time` 相关函数，初始化系统时间 。
 [示例代码](https://github.com/MiEcosystem/mijia_ble_secure/blob/c8fdaf4daedc412c7af1fdfa39fbd59e9874d27e/time.c#L22-L40)
@@ -251,7 +247,7 @@ mijia_ble_libs
 
 #### Q: 有问题怎么办？
 
-A: 关于产品定义或[小米IoT开发者平台](https://iot.mi.com/)的问题，请联系米家产品经理。技术问题请区分是芯片开发的问题还是米家接入的问题。如果是芯片开发的问题，请联系厂商，如果是米家接入的问题，请搜索[米家高安全级接入示例demo](https://github.com/MiEcosystem/mijia_ble_secure)相关issue，看是否有类似的问题。如果没有，请提交新issue。
+A: 关于产品定义或[小米IoT开发者平台](https://iot.mi.com/new/index.html)的问题，请联系米家产品经理。技术问题请区分是芯片开发的问题还是米家接入的问题。如果是芯片开发的问题，请联系厂商，如果是米家接入的问题，请搜索[米家高安全级接入示例demo](https://github.com/MiEcosystem/mijia_ble_secure)相关issue，看是否有类似的问题。如果没有，请提交新issue。
 
  #### Q: 如何查看log？
 

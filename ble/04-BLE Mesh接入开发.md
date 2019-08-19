@@ -1,6 +1,6 @@
-# 小米BLE Mesh开发者指南
+# BLE Mesh接入开发
 
-*本文用于指导产品开发者利用已支持小米BLE Mesh接入的模组开发产品*
+*本文用于指导产品开发者实现BLE Mesh产品接入*
 
 <br/>
 
@@ -28,7 +28,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 | :----------- | :------- | :--------------------------------------------------------- | :--------------------- |
 | Silicon Labs | BG13     | https://github.com/MiEcosystem/mijia_ble_mesh/tree/silabs  | Flash ~ 64K, RAM ~ 48K |
 | Realtek      | RTL8762C | https://github.com/MiEcosystem/mijia_ble_mesh/tree/realtek | Flash ~ 80K, RAM ~ 48K |
-| Telink （开发中）| TLSR825x | https://github.com/MiEcosystem/mijia_ble_mesh/tree/telink  | Flash ~ 24K, RAM ~ 20K  |
+| Telink       | TLSR825x | https://github.com/MiEcosystem/mijia_ble_mesh/tree/telink  | Flash ~ 24K, RAM ~ 20K  |
 
 
 ## 产品创建流程

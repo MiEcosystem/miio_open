@@ -1,16 +1,21 @@
-# 米家标准BLE接入产品开发
+# 标准BLE接入开发
 
 *本文用于指导产品开发者实现标准BLE产品接入*
 
-## 0.准备工作
+## 接入米家
 
-### 软件环境：
+稍后补充
+
+## 空白工程集成米家标准认证库
+
+### 软件环境
 * IDE/toolchains (根据芯片 SDK 要求进行安装，如遇问题可咨询芯片原厂 FAE)
 * [JLink](https://www.segger.com/downloads/jlink/)
 * [Git](https://git-scm.com/downloads)
 
-### 硬件环境：
-硬件平台可以选用芯片原厂的开发板，或使用在研产品 PCBA。推荐使用原厂开发板环境进行功能验证。完成功能验证后再移植到在研产品 PCBA。米家提供基于开发板实现的标准接入 Demo Project。<br>
+### 硬件环境
+硬件平台可以选用芯片原厂的开发板，或使用在研产品 PCBA。推荐使用原厂开发板环境进行功能验证。完成功能验证后再移植到在研产品 PCBA。米家提供基于开发板实现的标准接入 Demo Project。
+
 Demo Project GitHub 地址如下：（请按照各分支下 README ，完成工程导入）
 
 | 芯片厂商      | 芯片平台       | Demo Project                                                       |
@@ -18,11 +23,11 @@ Demo Project GitHub 地址如下：（请按照各分支下 README ，完成工�
 | Nordic       | 51 Series      | https://github.com/MiEcosystem/mijia_ble_standard/tree/nordic_legacy|
 | Nordic       | 52 Series      | https://github.com/MiEcosystem/mijia_ble_standard/tree/nordic      |
 | Silicon Labs | BG13           | https://github.com/MiEcosystem/mijia_ble_standard/tree/silabs      |
-| Telink       | TLSR8253       | https://github.com/MiEcosystem/mijia_ble_standard/tree/telink      |
+| Telink       | TLSR825x       | https://github.com/MiEcosystem/mijia_ble_standard/tree/telink      |
 
 
-## 1.代码集成
-(*如果开发者在 Demo Project 基础上进行开发，可以跳过本节 1~5 步*)
+### 代码集成
+*如果开发者在 Demo Project 基础上进行开发，可以跳过本节 1~5 步*
 
 Demo Project 代码结构：
 
@@ -36,8 +41,7 @@ Demo Project 代码结构：
 其中，SoC stack & SDK 由芯片原厂提供，米家会推荐已验证的 SDK 版本；
 mijia ble api & libs 由米家提供，以源码形式托管在 GitHub 上。推荐使用 git submodule 方式将米家代码集成到自己仓库中，以便后续通过 submodule update 方式进行更新。mijia ble api 为开源仓库，无需申请权限即可访问。mijia ble libs 为私有仓库，需申请访问权限。（请联系产品接口人）
 
-### 集成方法如下：
-（将以 nordic 为例，示例如何具体操作）
+*以 nordic 为例*
 
 1.下载芯片原厂 SDK。(SDK 版本根据 mijia ble api 要求进行选择)
 ```
@@ -97,7 +101,7 @@ mijia_ble_libs
         └── pt_misc.c
 ```
 
->[注意] libs 引用的 `./third_party/` 路径下的第三方开源代码（例如， mbedtls，RTT），可能在 SoC SDK 中已经包含。当工程编译出现重复定义冲突时，开发者需要去掉 libs 中重复的文件。（比如，原厂工程中已经包含 SEGGER RTT 文件，就无需再添加 `./third_party/SEGGER_RTT` 路径下源码）
+*<注> libs 引用的 `./third_party/` 路径下的第三方开源代码（例如， mbedtls，RTT），可能在 SoC SDK 中已经包含。当工程编译出现重复定义冲突时，开发者需要去掉 libs 中重复的文件。（比如，原厂工程中已经包含 SEGGER RTT 文件，就无需再添加 `./third_party/SEGGER_RTT` 路径下源码）*
 
 6.创建自定义配置文件，在文件中添加下列宏定义，然后将 `CUSTOMIZED_MI_CONFIG_FILE=<your_config.h>` 添加到工程 `Preprocesser symbols`中；
 
@@ -116,7 +120,7 @@ mijia_ble_libs
 | OBJ_ADV_INTERVAL_MS       | 每条 mibeacon object 发送间隔                 |
 | OBJ_ADV_TIMEOUT_MS        | 每条 mibeacon object 发送时长                 |
 
-*<注1> 如果缺省宏定义，会采用 mi_config.h 中默认值。例如，不定义 PRODUCT_ID，则默认为 463 小米蓝牙开发板，此产品为白名单用户可见。（如需使用此 PID 进行功能验证，请申请白名单权限）*
+*<注> 如果缺省宏定义，会采用 mi_config.h 中默认值。例如，不定义 PRODUCT_ID，则默认为 463 小米蓝牙开发板，此产品为白名单用户可见。（如需使用此 PID 进行功能验证，请申请白名单权限）*
 
 7.如需查看 log 信息，下列宏定义添加到工程 `Preprocesser symbols` 中；
 
@@ -126,8 +130,8 @@ mijia_ble_libs
 | MI_ASSERT                 | MI_LOG_ENABLED 打开时才有效，进行 assert 检查   |
 
 
-## 2.米家认证
-(*进行以下步骤前请**先阅读** mijia ble libs [**使用手册**](https://github.com/MiEcosystem/mijia_ble_libs/blob/master/readme.md)*)
+### 米家认证
+*进行以下步骤前请**先阅读** mijia ble libs [**使用手册**](https://github.com/MiEcosystem/mijia_ble_libs/blob/master/readme.md)*
 
 标准 BLE 接入设备需支持 **米家标准认证协议** `standard auth`，该功能已在 `mijia ble libs` 中集成，使用方法如下：
 
@@ -178,13 +182,13 @@ mijia_ble_libs
     - 米家 App 里删除设备
     - 设备上长按重置按钮
 
-## 3.应用层开发
+### 应用层开发
 认证完成后，产品便具备安全通信的能力。产品可以通过发送广播或建立连接进行加密数据传输。
 
 ### 广播方式
 BLE 是一种近场通信方式，如果要实现消息的远程上报，则需要搭配一个能够连接互联网的桥接设备，这个设备称为蓝牙网关。
 
-米家定义了两类广播消息 [object](https://github.com/MiEcosystem/miio_open/blob/master/ble/03-米家BLE%20Object协议.md)：事件和状态。**事件**上报不存在频率限制，具有高实时性，可以用来触发自动化场景，比如开门事件触发开灯；**状态**上报存在频率限制，具有高延迟，适用于周期或缓慢变化的数据，比如环境温度。使用 `mibeacon_obj_enque()` 将待发送消息放入发送队列，设备将按照设置的间隔进行多次广播。每条消息的发送间隔和总时长可以通过宏定义修改，具体参数参考 之前章节1.6 。
+米家定义了两类广播消息：事件和状态。**事件**上报不存在频率限制，具有高实时性，可以用来触发自动化场景，比如开门事件触发开灯；**状态**上报存在频率限制，具有高延迟，适用于周期或缓慢变化的数据，比如环境温度。使用 `mibeacon_obj_enque()` 将待发送消息放入发送队列，设备将按照设置的间隔进行多次广播。每条消息的发送间隔和总时长可以通过宏定义修改，具体参数参考 之前章节1.6 。
 [示例代码](https://github.com/MiEcosystem/mijia_ble_standard/blob/65f0093ebaa19a58a0e43f108be321f675a8ce99/main.c#L478-L484)
 
 ### 连接方式
@@ -202,7 +206,7 @@ BLE 是一种近场通信方式，如果要实现消息的远程上报，则需�
 ## 4.FAQ
 
 #### Q: 有问题怎么办？
-A: 关于产品定义或[小米IoT开发者平台](https://iot.mi.com/)的问题，请联系米家产品经理。技术问题请区分是芯片开发的问题还是米家接入的问题。如果是芯片开发的问题，请联系厂商 FAE，如果是米家接入的问题，请先搜索[米家 BLE 标准认证接入demo](https://github.com/MiEcosystem/mijia_ble_standard)相关 issue，看是否有类似的问题。如果没有，请按照模板创建新 issue（务必附带设备侧 log 信息）。
+A: 关于产品定义或[小米IoT开发者平台](https://iot.mi.com/new/index.html)的问题，请联系米家产品经理。技术问题请区分是芯片开发的问题还是米家接入的问题。如果是芯片开发的问题，请联系厂商 FAE，如果是米家接入的问题，请先搜索[米家 BLE 标准认证接入demo](https://github.com/MiEcosystem/mijia_ble_standard)相关 issue，看是否有类似的问题。如果没有，请按照模板创建新 issue（务必附带设备侧 log 信息）。
 
 #### Q: 如何查看 log 信息？
 A:设备端：请下载并安装 JLink，
@@ -220,7 +224,7 @@ App端：
 
 #### Q: 产品的pid如何获取？
 
-A: 产品的pid是在[小米IoT开发者平台](https://iot.mi.com/)上注册产品时生成的，在demo中pid = 156，是一个弱绑定的蓝牙开发板产品，用于测试。 还有一个强绑定的蓝牙开发板产品pid = 930，此两个产品类型仅用于开发者做初期测试。在真正的产品开发中，开发者应需要pid及强弱绑定关系，与在[小米IoT开发者平台](https://iot.mi.com/)上注册产品时的信息保持一致。强弱绑定的具体定义，可参考小米IoT开发者平台。
+A: 产品的pid是在[小米IoT开发者平台](https://iot.mi.com/new/index.html)上注册产品时生成的，在demo中pid = 156，是一个弱绑定的蓝牙开发板产品，用于测试。 还有一个强绑定的蓝牙开发板产品pid = 930，此两个产品类型仅用于开发者做初期测试。在真正的产品开发中，开发者应需要pid及强弱绑定关系，与在[小米IoT开发者平台](https://iot.mi.com/new/index.html)上注册产品时的信息保持一致。强弱绑定的具体定义，可参考小米IoT开发者平台。
 
 #### Q: 同时发现多个同类产品时(如多个蓝牙温湿度传感器)，用户如何确定绑定哪个产品？
 
