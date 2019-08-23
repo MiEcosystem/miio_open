@@ -4,7 +4,17 @@
 
 ## 接入米家
 
-稍后补充
+标准BLE接入方式的软件SDK，由三部分组成：芯片原厂SDK，米家标准认证库，米家标准认证示例Demo。具体步骤如下：
+
+- [米家标准认证库](https://github.com/MiEcosystem/mijia_ble_libs)是私有工程，产品开发者首先需联系小米产品经理，增加获取米家标准认证库的权限。
+- 根据芯片选型，下载芯片厂商提供的SDK，各分支下有对应的下载地址链接或下载方法。
+- 下载[米家标准认证示例demo](https://github.com/MiEcosystem/mijia_ble_standard)
+  - 按照各分支下的README说明，进入到芯片原厂SDK的指定目录
+  - 命令行执行 `git clone -b xxx(对应分支) --recursive https://github.com/MiEcosystem/mijia_ble_standard.git`。建议使用git clone --recursive命令，直接网站上下载会发现有些文件找不到，这是因为submodule没有下载成功
+- 联系小米产品经理申请开通“小米蓝牙开发板”白名单。
+- 按照各分支下README说明中的路径导入工程，编译固件，下载固件到硬件板卡。
+- 打开米家APP，开启蓝牙，发现附近的设备，点击“小米蓝牙开发板”，可成功连接登陆使用，表示已完成米家认证流程。
+- 后续的产品开发中，可修改demo例程中dev_info结构体中的pid字段为自己实际的产品id（demo例程中pid为156，表示小米蓝牙开发板），进行实际产品的开发。
 
 ## 空白工程集成米家标准认证库
 
