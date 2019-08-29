@@ -51,7 +51,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 ![Model Development](./pics/select-model.png)
 
-基础配置页面确认**安全级别为低**，用户可以修改产品名称和产品图片，其他配置如图所示。
+基础配置页面确认**安全级别为低**，用户可以修改产品名称和产品图片，其他配置如图所示。一定要点击编辑按钮和确认按钮确认配置被保存。如果申请的pid不能被网关发现，请确认基础配置是否正确。
 
 ![Model Development](./pics/basic-config.png)
 
@@ -78,6 +78,8 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 **用户一定要选择一个模板**，如果现有模板不能满足用户需求，可向产品经理提需求增加模板。用户在模板的基础上还可以添加标准Service和自定义Service。建议用户选用标准Service。因为小爱同学，AI大脑只能理解MIoT Spec的定义，这样定义后，功能可以被语音控制。
 
 ![Model Development](./pics/add-more-service.png)
+
+**注意：不要轻易修改属性中的详情页，尤其不要修改“格式”。**
 
 **注意：目前对于自定义的Service，在网关端没有定义消息上报过滤规则，因此产品必须保证只上报有意义的数据，保证上报的时间间隔。此部分先联系产品经理。**
 
@@ -117,7 +119,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 |   1   | Device Information  |   3   |    Serial-Number     | string  |       read        |               |            |
 |   1   | Device Information  |   4   |  Firmware Revision   | string  |       read        |               |            |
 |   2   |        Light        |   1   |    Switch Status     |  bool   | read write notify |  true/false   |            |
-|   2   |        Light        |   2   |      Brightness      | uint8_t | read write notify |   [0,100,1]   | percentage |
+|   2   |        Light        |   2   |      Brightness      | uint8_t | read write notify |   [1,100,1]   | percentage |
 |   2   |        Light        |   3   |  Color Temperature   | kelvin  | read write notify | [800,20000,1] |   kelvin   |
 
 Mesh Spec和MIoT Spec间映射关系如下：
@@ -145,6 +147,7 @@ Mesh Spec和MIoT Spec间映射关系如下：
 - 申请对应平台的模组。
 - 准备网关。由于Mesh网关仍在不断的迭代更新，已上市的网关并不一定包含最新的功能。**推荐使用**yeelight语音助手，绑定到个人名下后联系小米开发人员，**升级到最新测试版本**（包含多项正在开发的最新功能）。
 - 不论采用何种模组，demo工程中都默认指定了pid。此pid可以配合语音及App上的插件演示大部分功能。之后都需要**修改成厂商自己申请的pid**。并要了解，对于某个模组，第一次绑定之后，**pid和mac地址均不能改变**。
+- 在调试期间，语音控制可能不能使用。请使用[设备调试助手](https://debugger.iot.mi.com/iot/guide)进行调试。右上角可以切换环境，如果正式环境没有被调式设备，可以切换预览环境尝试。同时可以使用自然语言模拟真实语音控制进行调试。
 
 ### Realtek 模组开发指导
 
