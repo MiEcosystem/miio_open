@@ -1,4 +1,4 @@
-# 标准BLE接入开发
+﻿# 标准BLE接入开发
 
 *本文用于指导产品开发者实现标准BLE产品接入*
 
@@ -34,6 +34,8 @@ Demo Project GitHub 地址如下：（请按照各分支下 README ，完成工�
 | Nordic       | 52 Series      | https://github.com/MiEcosystem/mijia_ble_standard/tree/nordic      |
 | Silicon Labs | BG13           | https://github.com/MiEcosystem/mijia_ble_standard/tree/silabs      |
 | Telink       | TLSR825x       | https://github.com/MiEcosystem/mijia_ble_standard/tree/telink      |
+| Realtek      | RTL8762        | https://github.com/MiEcosystem/mijia_ble_standard/tree/realtek     |
+| Dialog       | DA14585        | https://github.com/MiEcosystem/mijia_ble_standard/tree/Dialog      |
 
 
 ### 代码集成
