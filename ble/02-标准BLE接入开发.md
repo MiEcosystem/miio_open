@@ -35,7 +35,8 @@ Demo Project GitHub 地址如下：（请按照各分支下 README ，完成工�
 | Silicon Labs | BG13           | https://github.com/MiEcosystem/mijia_ble_standard/tree/silabs      |
 | Telink       | TLSR825x       | https://github.com/MiEcosystem/mijia_ble_standard/tree/telink      |
 | Realtek      | RTL8762        | https://github.com/MiEcosystem/mijia_ble_standard/tree/realtek     |
-| Dialog       | DA14585        | https://github.com/MiEcosystem/mijia_ble_standard/tree/Dialog      |
+| Dialog       | DA145xx        | https://github.com/MiEcosystem/mijia_ble_standard/tree/Dialog      |
+| Dialog       | DA146xx        | https://github.com/MiEcosystem/mijia_ble_standard/tree/da146xx     |
 
 
 ### 代码集成
