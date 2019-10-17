@@ -32,7 +32,7 @@
 
 ## 米家高安全级认证库介绍
 
-开发者首先需要了解[标准BLE接入开发](https://github.com/MiEcosystem/miio_open/blob/master/ble/02-%E6%A0%87%E5%87%86BLE%E6%8E%A5%E5%85%A5%E5%BC%80%E5%8F%91.md)流程。
+开发者首先需要了解高安全级BLE接入开发流程。
 
 #### 产品开发过程中需了解的宏定义
 
@@ -242,27 +242,3 @@ mijia_ble_libs
 3.接收加密数据后，调用 `get_mi_authorization()` 判断设备当前登录状态，若已登录使用 `mi_session_decrypt()` 解密数据，再上报应用层处理。参考 stdio 服务 `on_write_permit()` 实现：
 [示例代码](https://github.com/MiEcosystem/mijia_ble_libs/blob/3b733870ca186662761f153f850537bae022fb5d/mijia_profiles/stdio_service_server.c#L76-L96)
 
-
-## FAQ
-
-#### Q: 有问题怎么办？
-
-A: 关于产品定义或[小米IoT开发者平台](https://iot.mi.com/new/index.html)的问题，请联系米家产品经理。技术问题请区分是芯片开发的问题还是米家接入的问题。如果是芯片开发的问题，请联系厂商，如果是米家接入的问题，请搜索[米家高安全级接入示例demo](https://github.com/MiEcosystem/mijia_ble_secure)相关issue，看是否有类似的问题。如果没有，请提交新issue。
-
- #### Q: 如何查看log？
-
- A: 设备端查看log，请下载Segger JLink RTT Viewer。
- - unix-like platform：
-```bash
-添加 JLinkExe 到 $PATH，后执行 JLinkExe
-$ JLinkExe -device <your_soc_platform> -if swd -speed 1000 -RTTTelnetPort 2000 -autoconnect 1
-新开一个 term，然后 telnet 本地 2000 端口：
-$ telnet localhost 2000
-```
-- windows platform：打开 Segger JLink RTT Viewer，选择对应芯片型号。连接成功可直接查看log。
-
- APP端首先需安装[debug apk](https://github.com/MiEcosystem/NewXmPluginSDK/blob/master/%E7%B1%B3%E5%AE%B6%E8%B0%83%E8%AF%95APK%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80.md)。然后查找文件管理 -> 手机 -> Android -> data -> com.xiaomi.smarthome -> files -> log -> miio-bluetooth log
-
-#### Q: 为什么改变 PRODUCT_ID 的值就认证失败了？
-
-A: 每个安全芯片只能绑定唯一一个 PID 和 MAC，如需更改 PID 或 MAC 请更换安全芯片。

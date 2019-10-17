@@ -38,8 +38,12 @@ Demo Project GitHub 地址如下：（请按照各分支下 README ，完成工�
 | Dialog       | DA145xx        | https://github.com/MiEcosystem/mijia_ble_standard/tree/Dialog      |
 | Dialog       | DA146xx        | https://github.com/MiEcosystem/mijia_ble_standard/tree/da146xx     |
 
+目前我们只提供了对主流芯片的支持，如果产品厂商确认要选用** 其它家 **的芯片，可以向小米产品经理提起申请，说明需要选用其它芯片的原因，如果申请通过，我们会这边会考虑支持并适配该芯片。
+
+**注意** 请不要自己适配芯片，万一出现问题，小米不保证有人力配合联调。
 
 ### 代码集成
+
 *如果开发者在 Demo Project 基础上进行开发，可以跳过本节 1~5 步*
 
 Demo Project 代码结构：
@@ -203,7 +207,7 @@ BLE 是一种近场通信方式，如果要实现消息的远程上报，则需�
 
 米家定义了两类广播消息：事件和状态。**事件**上报不存在频率限制，具有高实时性，可以用来触发自动化场景，比如开门事件触发开灯；**状态**上报存在频率限制，具有高延迟，适用于周期或缓慢变化的数据，比如环境温度。
 
-直接使用 `mibeacon_obj_enque()` 将待发送消息放入发送队列，设备将按照设置的间隔进行多次广播。每条消息的发送间隔和总时长可以通过宏定义修改，具体参数参考之前章节1.6 。
+请直接使用 `mibeacon_obj_enque()` 接口，将待发送消息放入发送队列，设备将按照设置的间隔进行多次广播。每条消息的发送间隔和总时长可以通过宏定义修改，具体参数参考之前章节1.6 。
 [示例代码](https://github.com/MiEcosystem/mijia_ble_standard/blob/65f0093ebaa19a58a0e43f108be321f675a8ce99/main.c#L478-L484)
 
 **不允许**开发者调用系统广播函数广播MiBeacon。**必须采用此接口**，小米在其中定义了重发次数和重发间隔，确保事件可以被网关收到。
@@ -220,36 +224,7 @@ BLE 是一种近场通信方式，如果要实现消息的远程上报，则需�
 3.接收加密数据后，调用 `get_mi_authorization()` 判断设备当前登录状态，若已登录使用 `mi_session_decrypt()` 解密数据，再上报应用层处理。参考 stdio 服务 `on_write_permit()` 实现：
 [示例代码](https://github.com/MiEcosystem/mijia_ble_libs/blob/3b733870ca186662761f153f850537bae022fb5d/mijia_profiles/stdio_service_server.c#L76-L96)
 
-## 4.FAQ
 
-#### Q: 有问题怎么办？
-A: 关于产品定义或[小米IoT开发者平台](https://iot.mi.com/new/index.html)的问题，请联系米家产品经理。技术问题请区分是芯片开发的问题还是米家接入的问题。如果是芯片开发的问题，请联系厂商 FAE，如果是米家接入的问题，请先搜索[米家 BLE 标准认证接入demo](https://github.com/MiEcosystem/mijia_ble_standard)相关 issue，看是否有类似的问题。如果没有，请按照模板创建新 issue（务必附带设备侧 log 信息）。
 
-#### Q: 如何查看 log 信息？
-A:设备端：请下载并安装 JLink，
-- unix-like 平台
-```bash
-添加 JLinkExe 到 $PATH，后执行 JLinkExe
-$ JLinkExe -device <your_soc_platform> -if swd -speed 1000 -RTTTelnetPort 2000 -autoconnect 1
-新开一个 term，然后 telnet 本地 2000 端口：
-$ telnet localhost 2000
-```
-- windows 平台：打开 Segger JLink RTT Viewer，选择对应芯片型号。连接成功可直接查看log。
 
-App端：
-- android ：安装 [debug 版本 APK](https://github.com/MiEcosystem/NewXmPluginSDK/blob/master/%E7%B1%B3%E5%AE%B6%E8%B0%83%E8%AF%95APK%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80.md)，然后查找文件管理 -> 手机 -> Android -> data -> com.xiaomi.smarthome -> files -> log -> miio-bluetooth log
 
-#### Q: 产品的pid如何获取？
-
-A: 产品的pid是在[小米IoT开发者平台](https://iot.mi.com/new/index.html)上注册产品时生成的，在demo中pid = 156，是一个弱绑定的蓝牙开发板产品，用于测试。 还有一个强绑定的蓝牙开发板产品pid = 930，此两个产品类型仅用于开发者做初期测试。在真正的产品开发中，开发者应需要pid及强弱绑定关系，与在[小米IoT开发者平台](https://iot.mi.com/new/index.html)上注册产品时的信息保持一致。强弱绑定的具体定义，可参考小米IoT开发者平台。
-
-#### Q: 同时发现多个同类产品时(如多个蓝牙温湿度传感器)，用户如何确定绑定哪个产品？
-
-A: 开发者需要在开发者平台选择蓝牙配对方式，目前支持三种配对选择方式：
-* 通过 RSSI 判断：发现多个同类产品时，选择信号最强的产品进行绑定。
-* 设备选择即配对：产品需具有按键。当用户按下按键后，产品发送带有 solicited bit 广播包，米家 App 收到该广播包后会进行绑定。
-* App 选择即配对：产品需具有字符显示能力，能够显示 MAC 地址最后 2 字节。用户在米家 App 内选择相同 MAC 的产品进行绑定。
-
-#### Q: 产品如何OTA？
-
-A: 目前没有统一的米家OTA机制，请联系芯片厂商。
