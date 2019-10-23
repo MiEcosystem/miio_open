@@ -45,16 +45,6 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 ![Model Development](./pics/create-mesh-product.png)
 
-产品创建完成后，需要在**测试白名单**添加小米账号才能通过米家APP搜索到设备，添加方法如下：
-
-新版平台右上角“返回旧版”进入主页，再点击“开发平台（旧）”，在“我的硬件”里点击相应产品的“权限管理”：
-
-![Model Development](./pics/access-management.png)
-
-在测试白名单中添加小米账号：
-
-![Model Development](./pics/product-writelist.png)
-
 在如下产品管理界面里选择相应的Model。
 
 ![Model Development](./pics/select-model.png)
@@ -158,6 +148,16 @@ Mesh Spec和MIoT Spec间映射关系如下：
 - 准备网关。由于Mesh网关仍在不断的迭代更新，已上市的网关并不一定包含最新的功能。**推荐使用**yeelight语音助手，绑定到个人名下后联系小米开发人员，**升级到最新测试版本**（包含多项正在开发的最新功能）。
 - 不论采用何种模组，demo工程中都默认指定了pid。此pid可以配合语音及App上的插件演示大部分功能。之后都需要**修改成厂商自己申请的pid**。并要了解，对于某个模组，第一次绑定之后，**pid和mac地址均不能改变**。
 - 在调试期间，语音控制可能不能使用。请使用[设备调试助手](https://debugger.iot.mi.com/iot/guide)进行调试。右上角可以切换环境，如果正式环境没有被调式设备，可以切换预览环境尝试。同时可以使用自然语言模拟真实语音控制进行调试。
+
+产品创建完成后，需要在**测试白名单**添加小米账号才能通过米家APP搜索到设备，添加方法如下：
+
+新版平台右上角“返回旧版”进入主页，再点击“开发平台（旧）”，在“我的硬件”里点击相应产品的“权限管理”：
+
+![Model Development](./pics/access-management.png)
+
+在测试白名单中添加小米账号：
+
+![Model Development](./pics/product-writelist.png)
 
 ### Realtek 模组开发指导
 
