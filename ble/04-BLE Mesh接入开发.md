@@ -39,21 +39,27 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 ### 创建BLE Mesh产品
 
-如下图创建产品，创建后会生成Product ID（后文简称PID），PID需要写入到设备固件里面，因此需记录下来。**注意：联网方式一定要选择“BLE-Mesh”**，其他选项按照图片选择。模组型号根据使用情况而定，若无合适选项则选择“其它”并手动填写相应模组型号。
+如下图创建产品，创建后会生成Product ID（后文简称PID），PID需要写入到设备固件里面，因此需记录下来。**注意：联网方式一定要选择“BLE-Mesh”**，其他选项按照图片选择。产品model名由公司名+品类名+产品型号组合而成，例如xiaomi.light.btml1。
 
 **Mesh模组第一次绑定后，模组中存储的证书链、Product ID和MAC会绑定在一起，即该模组的Product ID和MAC从此不可被更改。**
 
 ![Model Development](./pics/create-mesh-product.png)
 
-创建好产品后，从“数据中心”->“BI看板”选择对应的公司，点击进入产品管理界面。
+产品创建完成后，需要在**测试白名单**添加小米账号才能通过米家APP搜索到设备，添加方法如下：
 
-![Model Development](./pics/datacentre-BI.png)
+新版平台右上角“返回旧版”进入主页，再点击“开发平台（旧）”，在“我的硬件”里点击相应产品的“权限管理”：
+
+![Model Development](./pics/access-management.png)
+
+在测试白名单中添加小米账号：
+
+![Model Development](./pics/product-writelist.png)
 
 在如下产品管理界面里选择相应的Model。
 
 ![Model Development](./pics/select-model.png)
 
-基础配置页面确认**安全级别为低**，用户可以修改产品名称和产品图片，其他配置如图所示。一定要点击编辑按钮和确认按钮确认配置被保存。如果申请的pid不能被网关发现，请确认基础配置是否正确。
+基础配置页面确认**安全级别为低**，用户可以修改产品名称和产品图片，其他配置如图所示。一定要点击编辑按钮和确认按钮确认**配置被保存**。如果申请的pid不能被网关发现，请确认基础配置是否正确。
 
 ![Model Development](./pics/basic-config.png)
 
@@ -81,7 +87,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 ![Model Development](./pics/add-more-service.png)
 
-**注意：不要轻易修改属性中的详情页，尤其不要修改“格式”。** 如下图所示。如果格式为bool型，不允许修改为其他格式。如果属性为brighness，单位只能为百分比，有效值的范围为[0,65535]，如果属性为color-temperature，单位只能为开氏温度，有效值的范围为(800,20000)，注意不包含边缘值。
+**注意：不要轻易修改属性中的详情页，尤其不要修改“格式”。** 如下图所示。如果格式为bool型，不允许修改为其他格式。如果属性为brighness，单位只能为百分比，有效值的范围为[1,100]，如果属性为color-temperature，单位只能为开氏温度，有效值的范围为[800,20000]。
 
 ![Model Development](./pics/property-format.png)
 
@@ -281,6 +287,10 @@ Bluetooth Mesh Lighting Demonstration](https://www.silabs.com/documents/login/ap
 
 目前只支持手机直连基于GATT做OTA，且固件必须经过验签，否则设备会忽略收到的OTA包。
 
+固件上传前，按下图配置**固件设置**，并选择一个ble-mesh模组并保存(未在列表内芯片可以随便选一个)：
+
+![Model Development](./pics/select_module.png)
+
 固件签名由米家服务器执行，开发者仅需将待升级固件（Firmware）及版本号上传至服务器，新版操作界面如下所示（要求必须使用新版界面操作）：
 
 ![Model Development](./pics/upload_firmware.png)
@@ -293,7 +303,7 @@ Bluetooth Mesh Lighting Demonstration](https://www.silabs.com/documents/login/ap
 
 ![Model Development](./pics/start_test.png)
 
-如果是首次上传固件，上传完成后则必须配置支持签名和HTTPS的最低版本，例如设置的最低版本为1.2.0_0002，那么设备上的当前版本和待升级的版本，均必须大于1.2.0_0002。
+如果是首次上传固件，上传完成后则必须配置**支持签名和HTTPS的最低版本**，例如设置的最低版本为1.2.0_0002，那么设备上的当前版本和待升级的版本，均必须大于1.2.0_0002。
 
 最低版本设置目前仅支持在旧版界面上操作，如下所示：
 
