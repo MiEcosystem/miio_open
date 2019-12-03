@@ -14,7 +14,7 @@
 
 ***开发板由一块Arduino开发板通过串口和一块嵌入了小米智能模组的配对板组成。开发前请将两块电路板通过插针连接起来***
 
- ![](https://github.com/MiEcosystem/miio_open/blob/master/arduino/arduino.jpg)
+ ![](https://github.com/MiEcosystem/miio_open/blob/master/arduino/pictures/arduino.jpg)
 
 | Arduino | MIoT Broad | 功能 |
 | - | - | - |
@@ -68,7 +68,7 @@
  
  miot.light.demo1云端设备模板：
  
- ![](md_files/miot-device-spec.jpg)
+ ![](https://github.com/MiEcosystem/miio_open/blob/master/arduino/pictures/miot-device-spec.jpg)
  
 在小米开发者平台可编辑物模型，实现不同的功能，具体可参考[创建产品](https://iot.mi.com/new/doc/03-%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/02-%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6%E7%9B%B4%E8%BF%9E%E6%8E%A5%E5%85%A5/02-%E5%88%9B%E5%BB%BA%E4%BA%A7%E5%93%81.html)
 
@@ -80,7 +80,7 @@
 
 ***以下siid表示云端物模型中的Service id，piid表示云端物模型中的Property id，aiid 表示云端物模型中的action id，eiid 表示云端物模型中的event id，命令格式可参考[通用模组miot-spec支持资料](http://cdn.cnbj0.fds.api.mi-img.com/miio.files/commonfile_zip_12ea60af8aba2ae5387a9a790c5af095.zip)***
 
-![](md_files/msg_flow.jpg)
+![](https://github.com/MiEcosystem/miio_open/blob/master/arduino/pictures/msg_flow.jpg)
 
 ##### 下行消息基本流程如下
 
@@ -142,6 +142,6 @@ event_occured 4 1 1 "button_pressed"
 
 - 当您希望对开发板的硬件进行更多拓展时，可以使用飞线连接小米模组和Arduino开发板，同时将GPIO空出以接入其他外部设备。连接方法如下图所示：
 
-![](md_files/Connection.jpg)
+![](https://github.com/MiEcosystem/miio_open/blob/master/arduino/pictures/Connection.jpg)
 
 ***Arduino扩展学习可参考：https://www.arduino.cn/thread-1066-1-1.html***
