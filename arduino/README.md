@@ -14,7 +14,7 @@
 
 ***开发板由一块Arduino开发板通过串口和一块嵌入了小米智能模组的配对板组成。开发前请将两块电路板通过插针连接起来***
 
-![](arduino/Connection.jpg)
+ ![](arduino/arduino.jpg)
 
 | Arduino | MIoT Broad | 功能 |
 | - | - | - |
