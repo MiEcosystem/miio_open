@@ -2,13 +2,12 @@
 
 - ***Arduino 开发环境安装：http://arduino.nxez.com/2016/12/17/arduino-development-environment-introduction.html***
 
-- ***接入米家开放平台：https://iot.mi.com/***
+- ***接入小米IoT开发者平台：https://iot.mi.com/***
 
-- ***wifi模组接入资料：https://github.com/MiEcosystem/miio_open/tree/master/wifi***
 
 #### 1 背景介绍
 
-- 小米开发板旨在帮助您了解小米智能硬件开放平台的开发模式，帮助您更快地进入产品开发阶段
+- 小米开发板旨在帮助您了解小米IoT开发者平台的开发模式，帮助您更快地进入产品开发阶段
 
 #### 2 硬件框架
 
@@ -41,9 +40,9 @@
 - 将配对板右上角的拨码开关拨回右侧，回到普通工作状态，从电脑拔除开发板完成烧写。可参考(https://www.arduino.cn/thread-76154-1-1.html)
 
 
-#### 4 设备快连
+#### 4 设备配网
 
-使用WiFi进行工作的智能设备，需要连接上路由器、并和用户建立联系后才能工作。您可以通过小米开发板来体验这个过程
+使用WiFi进行工作的智能设备，需要连接上路由器、并和用户账号建立绑定关系后才能工作。您可以通过小米开发板来体验这个过程
 
 - 请首先使用手机下载 米家App
 
@@ -54,9 +53,9 @@
 - 在完成小米开发板的快速连接后，您的设备列表中会出现一个新的设备，您就可以通过手机对开发板做一些简单操作了。
 
 
-#### 5 MIOT-SPEC设备模板
+#### 5 MIOT-SPEC设备功能定义
 
-小米IoT在云端是有自己的物模型，主要有以下几个主要概念组成
+小米IoT有标准的设备功能描述方式，主要有以下几个主要概念组成
 
 | 概念 | 解释 |
 | - | - |
@@ -66,11 +65,11 @@
 | 服务（Service） | 服务代表了一类互相有联系的功能单元的合集，如环境检测服务、电池管理服务，服务中包括属性、方法、事件，可以描述该服务中包括的具体功能 |
 | 设备（Device） | 即产品本身，设备由多个服务聚合而成，如支持充电的风扇会有风扇服务、电池管理服务、环境检测服务等 |
  
- miot.light.demo1云端设备模板：
+ miot.light.demo1设备功能定义：
  
  ![](https://github.com/MiEcosystem/miio_open/blob/master/arduino/pictures/miot-device-spec.jpg)
  
-在小米开发者平台可编辑物模型，实现不同的功能，具体可参考[创建产品](https://iot.mi.com/new/doc/03-%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/02-%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6%E7%9B%B4%E8%BF%9E%E6%8E%A5%E5%85%A5/02-%E5%88%9B%E5%BB%BA%E4%BA%A7%E5%93%81.html)
+在小米开发者平台可编辑产品功能，实现不同的功能，具体可参考[创建产品](https://iot.mi.com/new/doc/03-%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/02-%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6%E7%9B%B4%E8%BF%9E%E6%8E%A5%E5%85%A5/02-%E5%88%9B%E5%BB%BA%E4%BA%A7%E5%93%81.html)
 
 #### 6 代码理解
 
@@ -78,7 +77,7 @@
 
 ##### 打开小米智能硬件平台，在“开发平台>开发板管理”中，找到您绑定的开发板，并点击“调试”进入云端调试页面
 
-***以下siid表示云端物模型中的Service id，piid表示云端物模型中的Property id，aiid 表示云端物模型中的action id，eiid 表示云端物模型中的event id，命令格式可参考[通用模组miot-spec支持资料](http://cdn.cnbj0.fds.api.mi-img.com/miio.files/commonfile_zip_12ea60af8aba2ae5387a9a790c5af095.zip)***
+***以下siid表示功能定义中的Service id，piid表示功能定义中的Property id，aiid 表示功能定义中的action id，eiid 表示功能定义中的event id，命令格式可参考[通用模组miot-spec支持资料](https://iot.mi.com/new/doc/04-%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/03-WiFi%E2%80%94%E9%80%9A%E7%94%A8%E6%A8%A1%E7%BB%84%E6%8E%A5%E5%85%A5/01-%E9%80%9A%E7%94%A8%E6%A8%A1%E7%BB%84%E6%A0%87%E5%87%86%E5%8D%8F%E8%AE%AE%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97.html)***
 
 ![](https://github.com/MiEcosystem/miio_open/blob/master/arduino/pictures/msg_flow.jpg)
 
