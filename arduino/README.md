@@ -30,3 +30,6 @@ DEMO提供基于Arduino开发板的mcu固件，详情请参考[Arduino_MIoT接�
 
 DEMO提供对应扩展程序，请查看[PluginDEMO](https://github.com/MiEcosystem/MHCommonPlugin/tree/master/com.miot.light.demo1)，需使用已开通权限github账号。
 
+### 更多内容
+
+绑定开发板后，可通过“小爱同学”尝试控制灯的开关，如：“小爱同学，开灯”。（此功能仅供尝试）
