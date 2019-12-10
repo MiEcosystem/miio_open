@@ -4,7 +4,7 @@
 
 ## 基础准备
 
-请阅读[小米IoT开发者平台](https://iot.mi.com/)中开发引导。
+为了您能更快理解相关内容，请提前阅读[小米IoT开发者平台](https://iot.mi.com/)中开发引导。
 
 其中[直连接入快速引导](https://iot.mi.com/new/doc/02-%E4%BA%A7%E5%93%81%E6%8E%A5%E5%85%A5%E6%8C%87%E5%8D%97/01-%E5%BF%AB%E9%80%9F%E5%BC%95%E5%AF%BC%EF%BC%88%E7%9B%B4%E8%BF%9E%E6%8E%A5%E5%85%A5%EF%BC%89.html)、[名词解释](https://iot.mi.com/new/doc/07-%E5%B8%B8%E7%94%A8%E4%BF%A1%E6%81%AF/01-%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A.html)、[小米IoT协议规范](https://iot.mi.com/new/doc/03-%E5%B0%8F%E7%B1%B3IoT%E5%8D%8F%E8%AE%AE%E8%A7%84%E8%8C%83/01-%E6%A6%82%E8%BF%B0.html)为必看内容。
 
