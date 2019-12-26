@@ -135,11 +135,6 @@ void loop()
 				Serial.println("event_occured 4 1 1 \"button_pressed\"");
 				has_reported = 1;
 			}
-			if (button_timer_now - button_timer > INTERNAL_BUTTON_LONG_PRESS && !has_reported_long)
-			{ /* report long button event */
-				Serial.println("event_occured 4 1 1 \"button_long_pressed\"");
-				has_reported_long = 1;
-			}
 		}
 	}
 	else
