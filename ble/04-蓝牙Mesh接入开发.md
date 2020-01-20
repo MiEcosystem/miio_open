@@ -1,6 +1,6 @@
-# BLE Mesh接入开发
+# 蓝牙 Mesh接入开发
 
-*本文用于指导产品开发者实现BLE Mesh产品接入*
+*本文用于指导产品开发者实现蓝牙 Mesh产品接入*
 
 <br/>
 
@@ -8,17 +8,17 @@
 
 ### 设备Profile
 
-小米BLE Mesh系统会涉及到MIoT Spec和Mesh Spec两种Profile。
+小米蓝牙 Mesh系统会涉及到MIoT Spec和Mesh Spec两种Profile。
 
-MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备功能进行归类和统一，描述设备的功能和操作方法，并做了预定义。同样SIG也提供BLE Mesh的应用层规范，如Mesh Model、Status、Message等，本文称为Mesh Spec。
+MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备功能进行归类和统一，描述设备的功能和操作方法，并做了预定义。同样SIG也提供蓝牙 Mesh的应用层规范，如Mesh Model、Status、Message等，本文称为Mesh Spec。
 
-可以简单理解为，MIoT Spec是小米定义并实现的设备描述规范，Mesh网关、米家APP 、小爱同学，AI大脑、米家服务器均采用这套规范对设备进行控制；Mesh Spec是SIG定义的BLE Mesh应用层规范，用于BLE Mesh设备之间进行相互通信。两种规范会在Mesh网关完成转换，如下图：
+可以简单理解为，MIoT Spec是小米定义并实现的设备描述规范，Mesh网关、米家APP 、小爱同学，AI大脑、米家服务器均采用这套规范对设备进行控制；Mesh Spec是SIG定义的蓝牙 Mesh应用层规范，用于蓝牙 Mesh设备之间进行相互通信。两种规范会在Mesh网关完成转换，如下图：
 
 ![Xiaomi Mesh Profile](./pics/mesh-profile.png)
 
 ### 模组 + 固件SDK
 
-开发者拿到的模组和固件SDK已经实现了小米BLE Mesh的配网、配置、分组、IV更新等各种协议栈的功能，开发者只需要开发产品的应用功能即可。
+开发者拿到的模组和固件SDK已经实现了小米蓝牙 Mesh的配网、配置、分组、IV更新等各种协议栈的功能，开发者只需要开发产品的应用功能即可。
 
 设备重置：SDK并未强制规定设备的重置方法，但产品开发者必须自己定义设备的重置方法。例如对于照明设备，一般是快速开关5次重置设备，对于其他有按键的设备，可以通过长按5秒按键重置设备。
 
@@ -35,7 +35,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 登陆[小米IoT开发者平台](https://iot.mi.com/new/index.html)，请先阅读“开发引导”熟悉接入流程。
 
-### 创建BLE Mesh产品
+### 创建蓝牙 Mesh产品
 
 如下图创建产品，创建后会生成Product ID（后文简称PID），PID需要写入到设备固件里面，因此需记录下来。**注意：联网方式一定要选择“BLE-Mesh”**，其他选项按照图片选择。产品model名由公司名+品类名+产品型号组合而成，例如xiaomi.light.btml1。
 
@@ -59,7 +59,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 为了简化操作，开发者平台提供了常见产品模板，如亮度灯、色温灯等。产品模板提供了常见产品的大部分功能需求，且模板的所有功能都对应了SIG Mesh Model，Mesh网关默认支持这些产品模板。
 
-目前支持BLE Mesh模板名称及功能说明如下：后续会逐步增多更多的模板
+目前支持蓝牙 Mesh模板名称及功能说明如下：后续会逐步增多更多的模板
 
 |           名称           |    模板中文描述    |
 | :----------------------: | :----------------: |
@@ -92,11 +92,11 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 ![Model Development](./pics/instance-piid.png)
 
 
-### 小米BLE Mesh模版
+### 小米蓝牙 Mesh模版
 
 **本节内容涉及到Mesh Model与Miot Spec转换，只是用于加深固件开发者对二者的理解，可以略过本节内容不影响开发。**
 
-小米BLE Mesh模板实现了MIoT Spec与Mesh Model的映射关系。
+小米蓝牙 Mesh模板实现了MIoT Spec与Mesh Model的映射关系。
 
 以色温灯为例，色温灯模板中包含两个Element，结构如下所示：
 
@@ -140,8 +140,8 @@ Mesh Spec和MIoT Spec间映射关系如下：
 
 ### 开发之前
 
-- 确认产品的功能能否适用于现在的小米BLE Mesh接入技术。
-- 申请Github mijia_ble_mesh私有工程的权限获取demo工程。
+- 确认产品的功能能否适用于现在的小米蓝牙 Mesh接入技术。
+- 申请Github mijia_ble_mesh私有工程的权限获取demo工程，参考格式见[常用信息-获取内测资源与能力](https://iot.mi.com/new/doc/general-information/whitelist-related.html)。
 - 申请对应平台的模组。
 - 准备网关。由于Mesh网关仍在不断的迭代更新，已上市的网关并不一定包含最新的功能。**推荐使用**yeelight语音助手，绑定到个人名下后联系小米开发人员，**升级到最新测试版本**（包含多项正在开发的最新功能）。
 - 不论采用何种模组，demo工程中都默认指定了pid。此pid可以配合语音及App上的插件演示大部分功能。之后都需要**修改成厂商自己申请的pid**。并要了解，对于某个模组，第一次绑定之后，**pid和mac地址均不能改变**。
@@ -151,7 +151,7 @@ Mesh Spec和MIoT Spec间映射关系如下：
 
 ### Realtek 模组开发指导
 
-此工程实现了一个BLE Mesh色温灯的基本功能。请首先阅读Readme。对此工程有疑问可以直接提交issue。
+此工程实现了一个蓝牙 Mesh色温灯的基本功能。请首先阅读Readme。对此工程有疑问可以直接提交issue。
 
 下载代码：运行`git clone --recursive https://github.com/MiEcosystem/mijia_ble_mesh -b realtek`
 
@@ -159,7 +159,7 @@ Mesh Spec和MIoT Spec间映射关系如下：
 
 ### Silicon Labs 模组开发指导
 
-此工程实现了一个BLE Mesh色温灯的基本功能。请首先阅读Readme。对此工程有疑问可以直接提交issue。
+此工程实现了一个蓝牙 Mesh色温灯的基本功能。请首先阅读Readme。对此工程有疑问可以直接提交issue。
 
 下载代码：运行`git clone --recursive https://github.com/MiEcosystem/mijia_ble_mesh -b silabs`
 
@@ -167,7 +167,7 @@ Mesh Spec和MIoT Spec间映射关系如下：
 
 连接Segger Jlink RTT Viewer可以查看模组中log
 
-**强烈推荐首先阅读Silicon Labs提供的BLE Mesh文档及示例程序。** 本工程可以看作是基于标准BLE Mesh工程的一个具体应用。
+**强烈推荐首先阅读Silicon Labs提供的蓝牙 Mesh文档及示例程序。** 本工程可以看作是基于标准蓝牙 Mesh工程的一个具体应用。
 
 - 在project-name.isc文件填写设备信息并创建Element, Model。
 - 初始化Model。
@@ -277,7 +277,7 @@ Bluetooth Mesh Lighting Demonstration](https://www.silabs.com/documents/login/ap
 
 目前只支持手机直连基于GATT做OTA，且固件必须经过验签，否则设备会忽略收到的OTA包。
 
-固件上传前，按下图配置**固件设置**，并选择一个ble-mesh模组并保存(未在列表内芯片可以随便选一个)：
+固件上传前，按下图配置**固件设置**，并选择一个蓝牙 Mesh模组并保存(未在列表内芯片可以随便选一个)：
 
 ![Model Development](./pics/select_module.png)
 
