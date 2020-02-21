@@ -79,7 +79,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 ![Model Development](./pics/property-format.png)
 
-**注意：目前对于自定义的Service，在网关端没有定义消息上报过滤规则，因此产品必须保证只上报有意义的数据，保证上报的时间间隔。此部分先联系产品经理。**
+**注意：目前对于模板外的Service（即Vendor model），在网关端没有定义消息上报过滤规则，因此产品必须保证只上报有意义的数据，保证上报的时间间隔，且在状态变化时再上报，不允许周期性调用publish，此部分先联系产品经理。**
 
 消息上行时，Mesh网关会将Mesh Spec消息翻译成MIoT Spec消息，消息下行时，Mesh网关会将MIoT Spec消息翻译成Mesh Spec消息。如果用户自定义了Service，网关不会翻译，会通过Vendor Model透传此Service的Service ID、Property ID、Value（MIoT Spec定义），设备固件在Vendor Model里面解析、处理。
 
