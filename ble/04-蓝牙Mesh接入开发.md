@@ -47,7 +47,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 
 ![Model Development](./pics/select-model.png)
 
-基础配置页面确认**安全级别为低**，用户可以修改产品名称和产品图片，其他配置如图所示。一定要点击编辑按钮和确认按钮确认**配置被保存**。如果申请的pid不能被网关发现，请确认基础配置是否正确。
+基础配置页面可以修改产品名称和产品图片，其他配置如图所示。一定要点击编辑按钮和确认按钮确认**配置被保存**。如果申请的pid不能被网关发现，请确认基础配置是否正确。
 
 ![Model Development](./pics/basic-config.png)
 
@@ -69,6 +69,7 @@ MIoT Spec是小米定义的产品应用层的功能规范，它对智能设备�
 |      two-key-switch      |      双键开关      |
 |      three-key-switch    |      三键开关      |
 | power-consumption-outlet | 插座（带功耗参数） |
+| 		 fan-on-off		   |		风扇		|
 
 
 **用户一定要选择一个模板**，如果现有模板不能满足用户需求，可向产品经理提需求增加模板。用户在模板的基础上还可以添加标准Service和自定义Service。建议用户选用标准Service。因为小爱同学，AI大脑只能理解MIoT Spec的定义，这样定义后，功能可以被语音控制。
@@ -169,136 +170,49 @@ Mesh Spec和MIoT Spec间映射关系如下：
 
 **强烈推荐首先阅读Silicon Labs提供的蓝牙 Mesh文档及示例程序。** 本工程可以看作是基于标准蓝牙 Mesh工程的一个具体应用。
 
-- 在project-name.isc文件填写设备信息并创建Element, Model。
-- 初始化Model。
-```
-    /* SIG Model */
-    mesh_lib_generic_server_register_handler(MESH_GENERIC_ON_OFF_SERVER_MODEL_ID,
-                                            0,
-                                            onoff_request,
-                                            onoff_change);
+### GATT直连
 
-    /* Vendor Model */
-    gecko_cmd_mesh_vendor_model_init(PRIMARY_ELEM,
-                                    XIAOMI_COMPANY_ID,
-                                    VENDOR_SERVER_MODEL_MIOT_SPEC,
-                                    1,
-                                    sizeof(miot_spec_opcode_set),
-                                    miot_spec_opcode_set);
-```
-- 把对应的Model进行配置。将新创建的Model绑定appkey。并打开新创建SIG Model的publish，Vendor Model没有此项配置。其他配置保持不变。注意这些配置只有在进行完小米Provision之后才能执行。请仔细阅读代码，不要修改其他配置，仿照已有的Model配置来配置新创建的Model。
-```
-    /* SIG Model and Vendor Model */
-    gecko_cmd_mesh_test_bind_local_model_app(
-        p_list->head[i].elem_idx,
-        p_list->head[i].appkey_idx,
-        p_list->head[i].vendor == 0 ? 0xFFFF : p_list->head[i].vendor,
-        p_list->head[i].model)
+SDK中提供了stdio透传服务提供加密传输通道，为了获得会话密钥，**使用透传服务前需要先登陆**。
 
-    /* SIG Model Only */
-    result = gecko_cmd_mesh_test_set_local_model_pub(PRIMARY_ELEM, 0, 0xFFFF, 0x1000, XIAOMI_GATEWAY_GROUP, DEFAULT_TTL, PUB_PERIOD(6, STEP_10SEC), 0, 0)->result;
-    MI_ERR_CHECK(result);
-```
-- 实现每个SIG Model的回调函数。例如`onoff_reques`回调函数中根据`transition_ms`和`delay_ms`实现了对开关灯的硬件操作。根据`request_flags`决定是否要回复消息。按照特定的延时publish status。请仔细阅读代码，注意`mesh_lib_generic_server_response`和`mesh_lib_generic_server_publish`函数都是在timer的timeout回调中执行的。
-```
-    static void onoff_request(uint16_t model_id,
-                                uint16_t element_index,
-                                uint16_t client_addr,
-                                uint16_t server_addr,
-                                uint16_t appkey_index,
-                                const struct mesh_generic_request *request,
-                                uint32_t transition_ms,
-                                uint16_t delay_ms,
-                                uint8_t request_flags)
-    {
-        /* operation GPIO according to delay_ms and transition_ms */
-        if (delay_ms > 0) {
-            // TODO
-        } else if (transition_ms > 0) {
-            // TODO
-        } else {
-            // TODO
-        }
+服务UUID如下：
 
-        /* response status according to request_flags. use a timer to make mesh system stable, do not modify it */
-        if (request_flags & MESH_REQUEST_FLAG_RESPONSE_REQUIRED) {
-            gecko_cmd_hardware_set_soft_timer(TIMER_MS_2_TIMERTICK(rsp_delay), TIMER_ID_ONOFF_RSP, 1);
+|        Define         |                   UUID                    |
+| :-------------------: | :---------------------------------------: |
+|	BLE_UUID_STDIO_SRV	|	00000100-0065-6c62-2e74-6f696d2e696d	|
+|	BLE_UUID_STDIO_RX	|	00000101-0065-6c62-2e74-6f696d2e696d	|
+|	BLE_UUID_STDIO_TX	|	00000102-0065-6c62-2e74-6f696d2e696d	|
 
-            /* call mesh_lib_generic_server_response when timeout */
-            // TODO set parameters when timeout
-        }
+示例代码：
 
-        /* Publish status to publish address. use a timer to make mesh system stable, do not modify it */
-        gecko_cmd_hardware_set_soft_timer(TIMER_MS_2_TIMERTICK(pub_delay), TIMER_ID_ONOFF_PUB, 1);
+	// 初始化服务并注册rx回调
+	stdio_service_init(stdio_rx_handler);
+	
+	// 使用stdio_tx发送数据
+	static void stdio_rx_handler(uint8_t* data, uint8_t len)
+	{
+		int errno;
+		/* RX plain text (It has been decrypted.) */
+		MI_LOG_INFO("RX plain data\n");
+		MI_LOG_HEXDUMP(data, len);
 
-        /* call mesh_lib_generic_server_publish when timeout */
-        // TODO set parameters when timeout
-    }
-```
-- 实现Vendor Model的回调函数，根据event的类型做合适的操作。
-```
-    static void process_mesh_vendor_model_recv_event(struct gecko_cmd_packet *evt)
-    {
-        struct gecko_msg_mesh_vendor_model_receive_evt_t event = evt->data.evt_mesh_vendor_model_receive;
-        // TODO
-    }
-```
-- 自定义重置方式，例如连续开关多次。
-```
-    if (GPIO_PinInGet(BSP_BUTTON0_PORT, BSP_BUTTON0_PIN) == 0 ||
-        GPIO_PinInGet(BSP_BUTTON1_PORT, BSP_BUTTON1_PIN) == 0 ||
-        mesh_stat.quick_reboot > QUICK_BOOT_TIMES) {
-            // TODO
-            initiate_factory_reset();
-        }
-```
-- 如果需要实现Indication。
-```
-    // TODO
-```
-- 如果需要实现低功耗。
-```
-    // TODO
-```
-
-更多资料
-
-* [UG103.14: BLE Fundamentals](https://www.silabs.com/documents/login/user-guides/ug103-14-fundamentals-ble.pdf)
-* [UG136: Silicon Labs Bluetooth C
-Application Developer's Guide](https://www.silabs.com/documents/login/user-guides/ug136-ble-c-soc-dev-guide.pdf)
-
-* [QSG148: Getting Started with the Silicon
-Labs Bluetooth Mesh Lighting
-Demonstration](https://www.silabs.com/documents/login/quick-start-guides/qsg148-bluetooth-mesh-demo-quick-start-guide.pdf)
-* [AN1098: Understanding the Silicon Labs
-Bluetooth Mesh Lighting Demonstration](https://www.silabs.com/documents/login/application-notes/an1098-understanding-bluetooth-mesh-lighting-demo.pdf)
+		/* TX plain text (It will be encrypted before send out.) */
+		errno = stdio_tx(data, len);
+		MI_ERR_CHECK(errno);
+	}
 
 ### OTA
 
 目前只支持手机直连基于GATT做OTA，且固件必须经过验签，否则设备会忽略收到的OTA包。
 
-固件上传前，按下图配置**固件设置**，并选择一个蓝牙 Mesh模组并保存(未在列表内芯片可以随便选一个)：
+1. **固件设置**中选择一个蓝牙 Mesh模组并保存(未在列表内芯片可以随便选一个)；
 
-![Model Development](./pics/select_module.png)
+2. 新建版本中上传固件包，**固件版本**与实际版本一致；
 
-固件签名由米家服务器执行，开发者仅需将待升级固件（Firmware）及版本号上传至服务器，新版操作界面如下所示（要求必须使用新版界面操作）：
+3. 上传完成后需手动**申请签名**，并在**查看详情**中确认签名固件链接（如果没有链接请刷新页面或重新上传）；
 
-![Model Development](./pics/upload_firmware.png)
+4. 签名状态转换成“已签名”后，即可点击**开启测试**，用于开发者和内测用户下载新固件，测试完成后可以申请上线；
 
-上传完成后，默认固件未签名，需手动申请签名，操作如下：
+5. 如果是首次上传固件，上传完成后则必须配置**支持签名和HTTPS的最低版本**，例如设置的最低版本为1.2.0_0002，那么设备上的当前版本和待升级的版本，均必须大于1.2.0_0002。
 
-![Model Development](./pics/add_signature.png)
+![Model Development](./pics/ota.png)
 
-签名状态转换成“已签名”后，即可点击“开启测试”，用于开发者和内测用户下载新固件，操作如下：
-
-![Model Development](./pics/start_test.png)
-
-如果是首次上传固件，上传完成后则必须配置**支持签名和HTTPS的最低版本**，例如设置的最低版本为1.2.0_0002，那么设备上的当前版本和待升级的版本，均必须大于1.2.0_0002。
-
-最低版本设置目前仅支持在旧版界面上操作，如下所示：
-
-![Model Development](./pics/version_config.png)
-
-最低版本号仅能在已经上传的版本号列表中选择，如下所示：
-
-![Model Development](./pics/version_list.png)
