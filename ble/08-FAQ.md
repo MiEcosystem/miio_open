@@ -1,65 +1,104 @@
-
+## BLE产品开发FAQ
 
 #### Q: 有问题怎么办？
-A: 关于产品定义或[小米IoT开发者平台](https://iot.mi.com/new/index.html)的问题，请联系米家产品经理。技术问题请区分是芯片开发的问题还是米家接入的问题。如果是芯片开发的问题，请联系厂商 FAE，如果是米家接入的问题，请先搜索[米家 BLE 标准认证接入demo](https://github.com/MiEcosystem/mijia_ble_standard)相关 issue，看是否有类似的问题。如果没有，请按照模板创建新 issue（务必附带设备侧 log 信息）。
+A: 关于产品定义或[小米IoT开发者平台](https://iot.mi.com)的问题，请联系米家产品经理。技术问题请区分是芯片开发的问题还是米家接入的问题。如果是芯片开发的问题，请联系厂商 FAE，如果是米家接入的问题，请先搜索[BLE产品开发FAQ（本文档）](https://iot.mi.com/new/doc/embedded-development/ble/FAQ.html)，查看是否有类似的问题。如果没有，请在小米IoT开发者平台提交工单（务必附带设备侧 Log 信息）。
 
 ---
 
-#### Q: 如何查看 log 信息？
-A:设备端：请下载并安装 JLink，
-- unix-like 平台
-```bash
-添加 JLinkExe 到 $PATH，后执行 JLinkExe
-$ JLinkExe -device <your_soc_platform> -if swd -speed 1000 -RTTTelnetPort 2000 -autoconnect 1
-新开一个 term，然后 telnet 本地 2000 端口：
-$ telnet localhost 2000
-```
-- windows 平台：打开 Segger JLink RTT Viewer，选择对应芯片型号。连接成功可直接查看log。
+#### Q: SDK申请问题
+A: [mijia_ble_libs](https://github.com/MiEcosystem/mijia_ble_libs) 是私有工程，产品开发者首先需联系小米产品经理，申请获取米家标准认证库的权限。注意，每个新品的接入都要单独申请认证库的权限，一个产品申请一次，如果发现未经申请的新品接入，米家有权利拒绝产品上线。
 
-App端：
-- android ：安装 [debug 版本 APK](https://github.com/MiEcosystem/NewXmPluginSDK/blob/master/%E7%B1%B3%E5%AE%B6%E8%B0%83%E8%AF%95APK%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80.md)，然后查找文件管理 -> 手机 -> Android -> data -> com.xiaomi.smarthome -> files -> log -> miio-bluetooth log
+申请权限请发送邮件至 小米IoT平台开放窗口 <miot-openhome@xiaomi.com>，格式请参考常用信息->开发者反馈指引。
+
+目前SDK申请流程已规划线上化，敬请期待。
 
 ---
 
-#### Q: 产品的pid如何获取？
-
-A: 产品的pid是在[小米IoT开发者平台](https://iot.mi.com/new/index.html)上注册产品时生成的，在demo中pid = 156，是一个弱绑定的蓝牙开发板产品，用于测试。 还有一个强绑定的蓝牙开发板产品pid = 930，此两个产品类型仅用于开发者做初期测试。在真正的产品开发中，开发者应需要pid及强弱绑定关系，与在[小米IoT开发者平台](https://iot.mi.com/new/index.html)上注册产品时的信息保持一致。强弱绑定的具体定义，可参考小米IoT开发者平台。
-
----
-
-#### Q: 同时发现多个同类产品时(如多个蓝牙温湿度传感器)，用户如何确定绑定哪个产品？
-
-A: 开发者需要在开发者平台选择蓝牙配对方式，目前支持三种配对选择方式：
-* 通过 RSSI 判断：发现多个同类产品时，选择信号最强的产品进行绑定。
-* 设备选择即配对：产品需具有按键。当用户按下按键后，产品发送带有 solicited bit 广播包，米家 App 收到该广播包后会进行绑定。
-* App 选择即配对：产品需具有字符显示能力，能够显示 MAC 地址最后 2 字节。用户在米家 App 内选择相同 MAC 的产品进行绑定。
-
----
-#### Q: 为什么App中无法扫到设备？
-
-A: 通过以下步骤检查：
-* 检查账号是否在该module的**测试白名单**，米家App切换语言或清除缓存重新尝试。
-* 检查开放平台中该module是否按说明配置，重新保存配置信息。
-* 检查蓝牙广播包是否符合mibeacon要求。
-
----
 #### Q: 设备如何OTA？
 
-A: 目前没有统一的米家OTA机制，目前该功能正在研发过程中，我们后续将提供主流芯片的OTA的统一实现，降低厂商的接入成本。
+A: Mijia统一OTA目前已经支持Nordic、Silabs、realtek、telink芯片平台，请check最新Demo工程，并保证在固件工程中将USE_MIBLE_OTA宏定义打开即可使用。
+
+开发者也可以自行实现OTA的蓝牙通路，同样也可完成APP端从开放平台下载固件，再通过蓝牙连接将固件包传输到设备端。
+
+对于带有外部MCU设备（例如门锁设备）的OTA方案，OTA只是实现将整个的固件包下载到设备端，设备端可以再自行拆分，蓝牙和MCU分别进行升级。
 
 ---
 
-#### Q: 为什么改变 PRODUCT_ID 的值就认证失败了？
+#### Q: 开放平台产品配置
 
-A: 每个安全芯片/证书链只能绑定唯一一个 PID 和 MAC，如需更改 PID 或 MAC 请更换安全芯片/证书链。
+A: 开发者需要确认产品的**联网方式、强弱绑定、蓝牙配对方式**配置正确。
+
+**联网方式**要选择BLE。
+
+强弱绑定关系是服务器端的逻辑，与固件端开发无关，开发者可以根据自家的产品特点进行选择。
+- **强绑定**表示设备绑定账号后，其他人再尝试绑定时，会提示设备已经被其它用户绑定，即我不删除，谁都绑不走。
+- **弱绑定**表示设备绑定账号后，其他人再尝试绑定时，能够绑定成功，原账号刷新列表，设备消失，即谁最后绑定就是谁的。
+
+**配对方式**目前有三种：APP选择配对，RSSI符合配对，设备确认配对。
+
+- APP确认即配对：当附近有多个设备时，由APP选择与哪个设备进行配对。
+- RSSI符合即配对：要求设备靠近才能配对，选择此方式需要在开发者平台填写RSSI阈值，信号强度高于该阈值则可开始配对。
+- 设备确认即配对：要求在设备端进行确认操作（如按键）才能开始配对。
+
+开发固件端代码时请注意：
+
+当选择APP确认配对或RSSI符合配对时，solicited位置0。
+
+当选择设备确认配对时：
+- 首先，正常广播的MiBeacon中solicited位为0。
+- 当用户触发（如按键），将MiBeacon中solicited位修改为1，持续2~3秒后恢复为0。
+- 当APP检测到设备的solicited位为1后，才进行连接，开始认证流程。
+
+solicited 标志位请参考[米家BLE MiBeacon协议](https://iot.mi.com/new/doc/embedded-development/ble/ble-mibeacon.html)中的说明：0表示无操作；1表示请求 APP 进行注册绑定。当用户在开发者平台选择设备确认配对时才有效，否则置0。
+
+**注意：开发者只需要调用advertising_init()接口，参数传入0/1即可修改蓝牙广播中的solicited标志位**，具体可参考Demo例程中advertising_init()接口的调用方法。
 
 ---
-#### Q: 如何申请一个Object ID？
+#### Q: APP发现页面无法发现设备
 
-A: 目前不支持厂商自己申请Object ID, 如有特殊需求，请联系对接的产品经理。
+A: 存在以下几种情况：
+- 设备端已重置，但APP端未删除设备，APP的发现页面不会显示还在本机设备列表中的设备，请先在APP端也删除设备再重试。
+- APP端已删除设备，设备端未重置，对于目前最新的V5版本MiBeacon协议，APP会判断设备发出MiBeacon中的“已注册”标志位，扫到“已注册”的设备，APP的发现页面不会显示，这种情况下请重置设备再重试。对于无法重置的设备（如蓝牙温湿度计），请修改工程中的宏定义HAVE_RESET_BUTTON为0，这样设备端发出的MiBeacon的“已注册”标志位就一直为0。
+- APP端已删除设备，设备端也已经重置，请确认设备是否已上线或者用户的小米ID是否在设备的白名单中。调试Demo工程请联系小米产品经理申请开通“小米蓝牙开发板”白名单。
 
+---
 
-#### Q: BLE设备，通过手机App直连,怎么上报数据(不通过蓝牙网关上报数据)
+#### Q: 蓝牙网关Object上报
 
-A: 插件开发者可以调用 `set_user_device_data` 这个接口上报数据。可见参考[这个文档](https://github.com/MiEcosystem/ios-rn-sdk/blob/master/MiHomePluginSDK/docs/callSmartHomeAPI.md)上接口的说明
+A: 产品如果需要通过蓝牙网关向服务器上报事件或属性，开发者请先联系对接的产品经理，确认子设备要上报哪些事件和属性，然后在米家服务器端进行配置。目前申请Object ID流程已规划线上化，敬请期待。
 
+设备端上报obj，直接调用**mibeacon_obj_enque()** 接口，将待发送消息放入发送队列，设备将按照设置的间隔进行多次广播。每条消息的发送间隔和总时长可以通过宏定义修改，具体参数参考custom_mi_config.h文件中的宏定义。
+
+不允许开发者调用系统广播函数广播MiBeacon。必须采用此接口，小米在其中定义了重发次数和重发间隔，确保事件可以被网关收到。
+
+---
+
+#### Q: 绑定报错
+
+A: 请先回退到米家发布的Demo工程，确认Demo工程能否绑定成功。米家发布的Demo工程已经过验证，一般直接编译烧录即可绑定成功。
+
+修改PID后无法绑定成功，极大可能是服务器端未上线的原因，特别是海外服务器。
+
+如果是高安全认证或者mesh认证，每个安全芯片/证书链只能绑定唯一一个 PID 和 MAC，如需更改 PID 或 MAC 请更换安全芯片/证书链。
+
+如需协助定位问题，android端可下载安装[debug 版本 APK](https://github.com/MiEcosystem/NewXmPluginSDK/blob/master/%E7%B1%B3%E5%AE%B6%E8%B0%83%E8%AF%95APK%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80.md)，然后查找文件管理 -> 手机 -> Android -> data -> com.xiaomi.smarthome -> files -> log -> miio-bluetooth log，将Android米家APP的Log通过工单提交给APP开发同事进行分析和定位。
+
+---
+
+#### Q: 产品的Pid如何获取？
+
+A: 产品的pid是在[小米IoT开发者平台](https://iot.mi.com/new/index.html)上注册产品时生成的，在Demo中 Pid = 156，是一个弱绑定的蓝牙开发板产品，仅用于测试Demo。
+
+---
+
+#### Q: realtek模组使用
+A: 即将更新到开放平台文档，敬请期待。
+
+---
+
+#### Q: telink平台
+A: telink平台比较特殊，整个SDK都由telink维护，米家只管控认证库的权限，向开发者发送lib文件。
+
+开发者调试工程中遇到问题也建议直接联系telink技术支持。
+
+---
